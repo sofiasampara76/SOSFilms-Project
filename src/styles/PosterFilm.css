@@ -1,0 +1,84 @@
+@import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
+
+body {
+  font-family: "Madimi One", sans-serif;
+  font-weight: 400;
+  color: white;
+}
+
+.poster-img {
+  /* border-radius: 8px; */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  width: 100%;
+}
+
+.title {
+  font-size: 25px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.subtitle {
+  font-size: 0.9rem;
+  color: #ccc;
+  margin: 0;
+}
+
+.heart-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  height: 25px;
+  margin-top: 5px;
+  justify-content: flex-start;
+}
+
+.heart-btn:hover {
+  color: red;
+}
+
+.poster-text-container {
+  display: flex;
+  flex-direction: row;
+  /* background-color: beige; */
+  width: 100%;
+  justify-content: space-between;
+}
+
+.popular-now-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  width: 18%;
+  flex-shrink: 0;
+}
+
+.popular-now-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  gap: 6%;
+  padding: 3rem 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  height: 90%;
+  box-sizing: border-box;
+  align-items: center;
+  margin-top: -3%;
+}
+
+.main-img {
+  width: 100%;
+  object-fit: cover;
+}
+
+.poster-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* background-color: bisque; */
+}
+
