@@ -1,66 +1,67 @@
 @import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
 
 body {
-  font-family: "Madimi One";
-  font-weight: 400;
+    font-family: "Madimi One";
+    font-weight: 400;
 }
 
 .logo-image {
-  position: absolute;
-  color: aqua;
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  margin-left: 2%;
+    position: absolute;
+    color: aqua;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    margin-left: 2%;
 }
 
 .popular-now-container {
-  position: relative;
-  width: 100%;
-  /* height: 90vh; */
-  color: white;
-  overflow: hidden;
-  padding-top: 3%;
-  /* height: 100vh; */
+    position: relative;
+    width: 100%;
+    /* height: 90vh; */
+    color: white;
+    overflow: hidden;
+    padding-top: 3%;
+    /* height: 100vh; */
 }
 
 .most-popular-text {
-  z-index: 1;
-  color: white;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  margin-left: 3rem;
-  font-size: 25px;
+    z-index: 1;
+    color: white;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-left: 3rem;
+    font-size: 25px;
 }
 
 .popular-now-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(30px);
-  transform: scale(1.1);
-  z-index: 0;
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px);
+    transform: scale(1.1);
+    z-index: 0;
 }
 
 .arrow-down {
-  position: relative;
-  /* bottom: 1.5rem; */
-  left: 50%;
-  transform: translateX(-50%);
-  animation: bounce 2s infinite;
-  z-index: 10;
-  margin-top: -30px;
+    position: absolute; /* or fixed, depending on layout */
+    left: 50%; /* anchor to the center */
+    transform: translateX(-50%);
+
+    animation: bounce 2s infinite;
+    z-index: 10;
+
+    margin-top: -40px;
 }
 
 @keyframes bounce {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(10px);
-  }
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(10px);
+    }
 }

@@ -1,0 +1,35 @@
+body {
+    color: black;
+}
+
+.review-section {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    inset: 0;
+    filter: blur(30px);
+    z-index: 0;
+}
+
+.review-div {
+    position: absolute;
+    z-index: 1;
+}
+
+.review-h1 {
+    color: white;
+}
+
+.review-p {
+    color: white;
+}
+
+.logo-image {
+    position: absolute;
+    color: aqua;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    margin-left: 2%;
+}

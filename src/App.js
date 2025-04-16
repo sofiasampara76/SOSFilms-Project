@@ -4,13 +4,18 @@ import "./App.css";
 // import Hello from "./components/Hello";
 // import Message from "./components/Message";
 // import MyButton from "./components/Button";
-import MainPage from "./components/MainPage"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainPage from "./components/MainPage";
+import Review from "./components/Review";
 
 function App() {
   return (
-    <div className="App">
-      <MainPage />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/review" element={<Review />} />
+      </Routes>
+    </Router>
   );
 }
 
