@@ -15,13 +15,19 @@ body {
 }
 
 .popular-now-container {
-    position: relative;
-    width: 100%;
-    /* height: 90vh; */
+
     color: white;
     overflow: hidden;
     padding-top: 3%;
     /* height: 100vh; */
+
+  position: relative;
+  width: 100%;
+  /* height: 90vh; */
+  color: white;
+  overflow: hidden;
+  padding-top: 5%;
+  height: 130vh;
 }
 
 .most-popular-text {
@@ -35,8 +41,7 @@ body {
     font-size: 25px;
 }
 
-.popular-now-bg {
-    position: absolute;
+.popular-now-bg {    position: absolute;
     inset: 0;
     background-size: cover;
     background-position: center;
@@ -54,6 +59,32 @@ body {
     z-index: 10;
 
     margin-top: -40px;
+
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(30px);
+  transform: scale(1.1);
+  z-index: 0;
+  width: 100%;
+}
+
+.arrow-down {
+  position: relative;
+  /* bottom: 1.5rem; */
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+  z-index: 10;
+  margin-top: -30px;
+  z-index: 2;
+}
+
+.popular-now-content {
+  position: relative;
+  padding: 0px;
+>>>>>>> e050a76c7b85bdc1afdb4ab0678839972c29cb88
 }
 
 @keyframes bounce {

@@ -16,6 +16,15 @@ const NavBarMainPage = () => {
             <p className="navbar-text">Filter</p>
           </div>
           <div className="navbar-item">
+=======
+    <div className="navbar-biggest-container">
+      <div className="navbar-container">
+        <div className="navbar-item" onClick={() => alert("Filter clicked")}>
+          <img className="filter-icon" src="/filter-icon.svg" alt="Filter icon"></img>
+          <p className="navbar-text">Filter</p>
+        </div>
+        <div className="navbar-item" onClick={() => alert("Favourite clicked")}>
+>>>>>>> e050a76c7b85bdc1afdb4ab0678839972c29cb88
             <img src="/heart-btn.svg" alt="Favourite icon"></img>
             <p className="navbar-text">Favourite</p>
           </div>
@@ -34,11 +43,32 @@ const NavBarMainPage = () => {
           <img src="/profile-icon.svg" alt="Profile Icon"></img>
         </div>
       </div>
+<<<<<<< HEAD
       <div className="series-films-slider">
         <div className="series-container">
           <p>series</p>
         </div>
         <div className="films-container">
+=======
+      <div className="profile-icon-container" onClick={() => alert("Profile clicked")}>
+        <img src="/profile-icon.svg" alt="Profile Icon"></img>
+      </div>
+    </div>
+    <div className="series-films-slider">
+        <div
+          className={`slider-indicator ${selected === "shows" ? "left" : "right"}`}
+        />
+        <div
+          className="series-container"
+          onClick={() => handleSelect("shows")}
+        >
+          <p>series</p>
+        </div>
+        <div
+          className="films-container"
+          onClick={() => handleSelect("films")}
+        >
+>>>>>>> e050a76c7b85bdc1afdb4ab0678839972c29cb88
           <p>films</p>
         </div>
       </div>
