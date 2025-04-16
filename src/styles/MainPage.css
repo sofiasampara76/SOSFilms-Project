@@ -20,8 +20,8 @@ body {
   /* height: 90vh; */
   color: white;
   overflow: hidden;
-  padding-top: 3%;
-  /* height: 100vh; */
+  padding-top: 5%;
+  height: 130vh;
 }
 
 .most-popular-text {
@@ -43,6 +43,7 @@ body {
   filter: blur(30px);
   transform: scale(1.1);
   z-index: 0;
+  width: 100%;
 }
 
 .arrow-down {
@@ -53,6 +54,12 @@ body {
   animation: bounce 2s infinite;
   z-index: 10;
   margin-top: -30px;
+  z-index: 2;
+}
+
+.popular-now-content {
+  position: relative;
+  padding: 0px;
 }
 
 @keyframes bounce {

@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/NavBar.css"
 
-const NavBarMainPage = () => {
+const NavBarMainPage = ({ onSelectType }) => {
+  const [selected, setSelected] = useState("shows");
+
+  const handleSelect = (type) => {
+    setSelected(type);
+    onSelectType(type); // Notify parent to change view
+  };
   return (
     <>
     <div className="navbar-biggest-container">
       <div className="navbar-container">
-        <div className="navbar-item">
+        <div className="navbar-item" onClick={() => alert("Filter clicked")}>
           <img className="filter-icon" src="/filter-icon.svg" alt="Filter icon"></img>
           <p className="navbar-text">Filter</p>
         </div>
-        <div className="navbar-item">
+        <div className="navbar-item" onClick={() => alert("Favourite clicked")}>
             <img src="/heart-btn.svg" alt="Favourite icon"></img>
             <p className="navbar-text">Favourite</p>
         </div>
@@ -21,18 +27,27 @@ const NavBarMainPage = () => {
           </div>
         </div>
       </div>
-      <div className="profile-icon-container">
+      <div className="profile-icon-container" onClick={() => alert("Profile clicked")}>
         <img src="/profile-icon.svg" alt="Profile Icon"></img>
       </div>
     </div>
     <div className="series-films-slider">
-        <div className="series-container">
-            <p>series</p>
+        <div
+          className={`slider-indicator ${selected === "shows" ? "left" : "right"}`}
+        />
+        <div
+          className="series-container"
+          onClick={() => handleSelect("shows")}
+        >
+          <p>series</p>
         </div>
-        <div className="films-container">
-            <p>films</p>
+        <div
+          className="films-container"
+          onClick={() => handleSelect("films")}
+        >
+          <p>films</p>
         </div>
-    </div>
+      </div>
     </>
   );
 };

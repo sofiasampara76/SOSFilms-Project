@@ -1,0 +1,150 @@
+.poster-card-container {
+  position: relative;
+  z-index: 3;
+  min-width: 25%;
+  margin-top: 8%;
+}
+
+.poster-card-image {
+  width: 80%;
+  box-shadow: 0px 20px 80px 10px rgb(0, 0, 0, 1);
+}
+
+.genres-wrapper {
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  position: relative;
+  /* max-width: 240px; */
+  max-width: 100%;
+  width: auto;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 15px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+}
+
+.genres.scrollable {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 10px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0 4px;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  max-width: 200px;
+}
+
+.genres.scrollable::-webkit-scrollbar {
+  display: none;
+}
+
+.genre-tag {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  color: #fff;
+  position: relative;
+}
+
+.genre-arrow {
+  border: none;
+  color: white;
+  font-size: 1rem;
+  padding: 2px 8px;
+  background: transparent;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+}
+
+.film {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  text-align: center;
+  position: relative;
+  max-width: 300px;
+  z-index: 1;
+}
+
+.film-info {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  /* justify-self: center; */
+  justify-content: space-between;
+}
+
+.film-title {
+  position: relative;
+  font-size: 25px;
+  line-height: 1.2;
+  justify-self: start;
+  /* margin: 0; */
+}
+
+.film.center {
+  transform: scale(1.2);
+  opacity: 1;
+  /* max-width: 360px; */
+}
+
+.film.center .film-title {
+  position: flex;
+  font-size: 35px;
+  /* font-weight: bold; */
+  color: #fff;
+  justify-self: center;
+}
+
+.heart-button {
+  position: relative;
+  width: 10%;
+  cursor: pointer;
+}
+
+.film.left,
+.film.right {
+  opacity: 1;
+}
+
+.film.hidden {
+  display: none;
+}
+
+.arrow {
+  background: transparent;
+  /* background-color: black; */
+  border: none;
+  font-size: 2rem;
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.left-arrow {
+  left: 10px;
+  width: 5%;
+  left: 33%;
+}
+
+.right-arrow {
+  right: 10px;
+  width: 5%;
+  right: 33%;
+}
+

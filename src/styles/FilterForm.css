@@ -1,0 +1,10 @@
+.filter-form {
+  position: absolute;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  width: 60%;
+  min-width: 200px;
+  top: -1.3px;
+  left: -1.3px;
+}

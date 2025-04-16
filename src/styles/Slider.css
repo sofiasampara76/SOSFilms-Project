@@ -1,0 +1,61 @@
+/* Slider container */
+.slider-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 80%; /* Set to desired width */
+  overflow: hidden;
+}
+
+/* Cards wrapper (this will slide) */
+.cards-slider {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Card styles */
+.card {
+  min-width: 95%;
+  padding: 20px;
+  background-color: lightblue;
+  margin: 0 10px;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+}
+
+/* Arrow buttons */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.left-arrow {
+  left: 0;
+}
+
+.right-arrow {
+  right: 0;
+}
+
+/* Add some responsiveness */
+@media (max-width: 768px) {
+  .slider-container {
+    width: 100%;
+  }
+  .card {
+    min-width: 90%; /* Allow cards to take up more space on smaller screens */
+  }
+}

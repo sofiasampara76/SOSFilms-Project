@@ -43,6 +43,25 @@ body {
   gap: 10px;
   align-items: center;
   font-size: 16px;
+  cursor: pointer;
+}
+
+.search-input::-webkit-input-placeholder {
+  color: white;
+}
+
+.search-input::-moz-placeholder {
+  color: white;
+  opacity: 1;
+}
+
+.search-input:-ms-input-placeholder {
+  color: white;
+}
+
+.search-input::placeholder {
+  color: white;
+  opacity: 1;
 }
 
 .navbar-item img,
@@ -50,6 +69,7 @@ body {
 .navbar-search img,
 .navbar-search p {
   line-height: 0;
+  color: white;
   /* vertical-align: middle; */
 }
 
@@ -82,7 +102,6 @@ body {
   justify-self: center;
   font-family: "Madimi One", sans-serif;
   font-weight: 400;
-  color: white;
 }
 
 .profile-icon-container {
@@ -93,6 +112,7 @@ body {
   padding-left: 18px;
   padding-right: 18px;
   border-radius: 50px;
+  cursor: pointer;
 }
 
 .series-films-slider {
@@ -108,9 +128,30 @@ body {
   justify-content: space-between;
   padding: 6px;
   color: white;
+  overflow: hidden;
 }
 
-.films-container {
+.slider-indicator {
+  position: absolute;
+  width: 48%;
+  height: 76%;
+  border-radius: 24px;
+  background-color: rgba(255, 255, 255, 0.2);
+  /* top: 0; */
+  align-self: center;
+  z-index: 0;
+  transition: transform 0.3s ease-in-out;
+}
+
+.slider-indicator.left {
+  transform: translateX(0%);
+}
+
+.slider-indicator.right {
+  transform: translateX(100%);
+}
+
+/* .films-container {
   line-height: 0;
   width: 48%;
   border-radius: 20px;
@@ -123,6 +164,18 @@ body {
   border-radius: 20px;
   background-color: rgba(255, 255, 255, 0.2);
   padding: 10px;
+} */
+
+.series-container,
+.films-container {
+  z-index: 1;
+  width: 48%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 10px;
+  font-size: 14px;
 }
 
 .series-container p,
