@@ -1,20 +1,26 @@
 @import url("https://fonts.googleapis.com/css2?family=Madimi+One&display=swap");
 
 body {
-  font-family: "Madimi One";
-  font-weight: 400;
+    font-family: "Madimi One";
+    font-weight: 400;
 }
 
 .logo-image {
-  position: absolute;
-  color: aqua;
-  z-index: 1;
-  display: flex;
-  align-items: flex-start;
-  margin-left: 2%;
+    position: absolute;
+    color: aqua;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    margin-left: 2%;
 }
 
 .popular-now-container {
+
+    color: white;
+    overflow: hidden;
+    padding-top: 3%;
+    /* height: 100vh; */
+
   position: relative;
   width: 100%;
   /* height: 90vh; */
@@ -25,17 +31,35 @@ body {
 }
 
 .most-popular-text {
-  z-index: 1;
-  color: white;
-  overflow: hidden;
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  margin-left: 3rem;
-  font-size: 25px;
+    z-index: 1;
+    color: white;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    margin-left: 3rem;
+    font-size: 25px;
 }
 
-.popular-now-bg {
+.popular-now-bg {    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: blur(30px);
+    transform: scale(1.1);
+    z-index: 0;
+}
+
+.arrow-down {
+    position: absolute; /* or fixed, depending on layout */
+    left: 50%; /* anchor to the center */
+    transform: translateX(-50%);
+
+    animation: bounce 2s infinite;
+    z-index: 10;
+
+    margin-top: -40px;
+
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -60,14 +84,15 @@ body {
 .popular-now-content {
   position: relative;
   padding: 0px;
+>>>>>>> e050a76c7b85bdc1afdb4ab0678839972c29cb88
 }
 
 @keyframes bounce {
-  0%,
-  100% {
-    transform: translateX(-50%) translateY(0);
-  }
-  50% {
-    transform: translateX(-50%) translateY(10px);
-  }
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(10px);
+    }
 }

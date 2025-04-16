@@ -4,20 +4,20 @@ import "./App.css";
 // import Hello from "./components/Hello";
 // import Message from "./components/Message";
 // import MyButton from "./components/Button";
-import MainPage from "./components/MainPage"
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import MainPage from "./components/MainPage";
+import Review from "./components/Review";
+import UserProfile from "./components/UserProfile"
 
 function App() {
   return (
-    // <div className="App">
-    //   <MainPage />
-    // </div>
-     <BrowserRouter>
-     <Routes>
-       <Route path="/" element={<MainPage />} />
-       {/* <Route path="/details/:title" element={<DetailsPage />} /> */}
-     </Routes>
-   </BrowserRouter>
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainPage />} />
+        <Route path="/review" element={<Review />} />
+        <Route path="/profile" element={<UserProfile />} />
+      </Routes>
+    </Router>
   );
 }
 
