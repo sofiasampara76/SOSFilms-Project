@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/FilterForm.css"
+import "../styles/FilterForm.css";
 
 let genres = [
   "horror",
@@ -19,13 +19,14 @@ let genres = [
   "biography",
 ];
 
-const FilterForm = ({ filtersOpen }) => {
-
+const FilterForm = ({ filtersOpen, setFiltersOpen }) => {
   return (
-    <div className="filter-form" style={{
-        display: `url(${
-          filtersOpen === true ? "flex" : "none"
-        })`}}>
+    <div
+      className="filter-form"
+      style={{
+        display: filtersOpen ? "flex" : "none"
+      }}
+    >
       <span className="genres-text">genres</span>
       <div className="genres-grid">
         {genres.map((genre, i) => (
@@ -34,6 +35,12 @@ const FilterForm = ({ filtersOpen }) => {
           </div>
         ))}
       </div>
+      <button
+        className="close-filter-button"
+        onClick={() => setFiltersOpen(false)}
+      >
+        <img src="/close-button.svg" alt="Closing filter form button"></img>
+      </button>
     </div>
   );
 };

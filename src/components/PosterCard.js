@@ -34,13 +34,13 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
         ))} */}
         {isCenter && (
         <div className="genres-wrapper">
-          <button className="genre-arrow left" onClick={scrollLeft}>&lt;</button>
+          <button className="genre-arrow left" onClick={scrollLeft}><img src="/mini-arrow-left.svg" alt="Arrow left"></img></button>
           <div className="genres scrollable" ref={genreRef}>
             {filmInfo.genres.map((g, i) => (
               <span key={i} className="genre-tag">{g}</span>
             ))}
           </div>
-          <button className="genre-arrow right" onClick={scrollRight}>&gt;</button>
+          <button className="genre-arrow right" onClick={scrollRight}><img src="/mini-arrow-right.svg" alt="Arrow right"></img></button>
         </div>
       )}
       </div>

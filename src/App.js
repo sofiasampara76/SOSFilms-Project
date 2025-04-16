@@ -5,12 +5,19 @@ import "./App.css";
 // import Message from "./components/Message";
 // import MyButton from "./components/Button";
 import MainPage from "./components/MainPage"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
-      <MainPage />
-    </div>
+    // <div className="App">
+    //   <MainPage />
+    // </div>
+     <BrowserRouter>
+     <Routes>
+       <Route path="/" element={<MainPage />} />
+       {/* <Route path="/details/:title" element={<DetailsPage />} /> */}
+     </Routes>
+   </BrowserRouter>
   );
 }
 

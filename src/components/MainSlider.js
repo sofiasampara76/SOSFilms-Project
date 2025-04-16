@@ -71,7 +71,7 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
         style={{ backgroundImage: `url(${backgroundUrlk})` }}
       />
       <div className="navbar-slider">
-        <FilterForm filtersOpen={ filtersOpen }/>
+        <FilterForm filtersOpen={ filtersOpen} setFiltersOpen={setfiltersOpen}/>
         <div className="navbar-item" onClick={() => setfiltersOpen(!filtersOpen)}>
           <img
             className="filter-icon"
