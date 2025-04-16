@@ -15,7 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/review" element={<Review />} />
-        <Route path="/review" element={<UserProfile />} />
+        <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </Router>
   );
