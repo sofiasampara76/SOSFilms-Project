@@ -47,38 +47,31 @@ const UserProfile = () => {
         </div>
 
         <h2 className="favorite-title">favorite</h2>
+
         <div className="favorite-section">
+          <div className="left-favorite-section">
+            <div className="orientation">
+              <img className="" src="/list1.png" alt="Choosing oriantation of showing favoutite films" />
+              <img className="" src="/list2.png" alt="Choosing oriantation of showing favoutite films" />
+            </div>
             <div className="film-section">
-              <h3 className="film-title">films</h3>
-              {/* <div className="film-grid">
+                <h3 className="film-title">films</h3>
+                <ul className="film-grid">
                 {favoriteFilms.map((film, idx) => (
-                  <div key={idx} className="film-card">
-                    <img src={film.image} alt={film.title} />
+                  <li key={idx} className="show-item show-item-film">
+                    <img src={film.image} alt={film.title} className="film-poster" />
                     <p className="text-sm">{film.title}</p>
                     <div className="remove-box">
                       <img src="/unlike.svg" alt="Remove" className="remove-heart" />
                     </div>
-                  </div>
+                  </li>
                 ))}
-              </div> */}
-              <ul className="film-grid">
-              {favoriteFilms.map((film, idx) => (
-                <li key={idx} className="show-item">
-                 <img src={film.image} alt={film.title} className="film-poster" />
-                  <div className="show-content">
-                    <p className="font-semibold text-sm">{film.title}</p>
-                  </div>
-                  <div className="remove-box">
-                    <img src="/unlike.svg" alt="Remove" className="remove-heart" />
-                  </div>
-                </li>
-              
-              ))}
-            </ul>
+              </ul>
+              </div>
             </div>
-
             <div className="show-section">
             <h3 className="show-title">shows</h3>
+            {/* </div> */}
 
             <ul className="show-list">
               {favoriteShows.map((show, idx) => (
@@ -98,7 +91,6 @@ const UserProfile = () => {
               ))}
             </ul>
 
-            {/* ✅ Make sure this is not inside the .map() block */}
             <div className="arrow-down-container">
               <img src="/arrow-down.svg" alt="Show More" className="arrow-down-icon" />
             </div>
