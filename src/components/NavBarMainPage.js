@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { React, useState } from "react";
 import "../styles/NavBar.css";
 import { Link } from "react-router-dom";
 
@@ -46,7 +46,10 @@ const NavBarMainPage = ({ onSelectType }) => {
             </div>
           </div>
         </div>
-        <div className="profile-icon-container">
+        <div
+          className="profile-icon-container"
+          onClick={() => alert("Profile clicked")}
+        >
           <img src="/profile-icon.svg" alt="Profile Icon"></img>
         </div>
 
@@ -59,7 +62,9 @@ const NavBarMainPage = ({ onSelectType }) => {
       </div>
       <div className="series-films-slider">
         <div
-          className={`slider-indicator ${selected === "shows" ? "left" : "right"}`}
+          className={`slider-indicator ${
+            selected === "shows" ? "left" : "right"
+          }`}
         />
         <div className="series-container" onClick={() => handleSelect("shows")}>
           <p>series</p>

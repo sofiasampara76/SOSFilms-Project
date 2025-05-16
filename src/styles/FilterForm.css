@@ -7,4 +7,41 @@
   min-width: 200px;
   top: -1.3px;
   left: -1.3px;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.genres-text {
+  position: relative;
+  margin-top: 10%;
+  display: flex;
+  align-self: center;
+  margin-bottom: 4%;
+}
+
+.genres-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    row-gap: 10px;
+    column-gap: 20px;
+}
+
+.genre-pill {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 6px 14px;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  white-space: nowrap;
+  flex-basis: 45%;
+}
+
+.close-filter-button {
+    position: absolute;
+    background: transparent;
+    border: none;
+    bottom: 2%;
+    right: 2%;
+    cursor: pointer;
 }
