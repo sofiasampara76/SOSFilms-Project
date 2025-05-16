@@ -1,18 +1,12 @@
 import React from "react";
 import "../styles/Review.css";
+import { useLocation } from "react-router-dom";
 
-const Review = ({
-  backgroundUrl,
-  posterUrl,
-  status,
-  officialPage,
-  releaseDate,
-  releaseYear,
-  duration,
-  title,
-  rating,
-  description,
-}) => {
+const Review = () => {
+  const location = useLocation();
+  const filmInfo = location.state?.filmInfo;
+
+  if (!filmInfo) return <div>No film data provided!</div>;
   return (
     <section>
       {/* <div
@@ -41,61 +35,66 @@ const Review = ({
         {/* FILM CARD */}
         <section class="film-card">
           <div class="card-header">
-            <span class="status-badge">{status}</span>
-            <span class="official-page-badge">{officialPage}</span>
+            <span class="status-badge">{filmInfo.status}</span>
+            <span class="official-page-badge">
+              <a
+                href={filmInfo.officialPage}
+                style={{ textDecoration: "none", color: "black" }}
+              >
+                Official Page
+              </a>
+            </span>
           </div>
 
           <div class="poster-container">
             <img
-              src={posterUrl}
+              src={filmInfo.poster}
               alt="Minecraft Movie Poster"
               class="film-poster"
             />
 
-            <div class="release-date">{releaseDate}</div>
+            <div class="release-date">{filmInfo.releaseDate}</div>
           </div>
 
           <div class="card-meta">
-            <span class="year">{releaseYear}</span>
+            <span class="year">{filmInfo.releaseYear}</span>
             <img src="/Star.svg" alt="Star Rating" class="rating-icon" />
-            <span class="rating">{rating}</span>
-            <span class="duration">{duration}</span>
+            <span class="rating">{filmInfo.rating}</span>
+            <span class="duration">{filmInfo.duration}</span>
           </div>
 
-          <div class="film-title">{title}</div>
+          <div class="film-title">{filmInfo.title}</div>
         </section>
 
         <section class="about-section">
           <h2 class="section-title">about</h2>
-          <p class="description">{description}</p>
+          <p class="description">{filmInfo.description}</p>
 
           <div class="tag-row">
             <div class="tag-label">genres</div>
             <div class="tags">
-              <span class="tag">comedy</span>
-              <span class="tag">adventure</span>
-              <span class="tag">action</span>
+              <span class="tag">{filmInfo.genres[0]}</span>
+              <span class="tag">{filmInfo.genres[1]}</span>
             </div>
           </div>
 
           <div class="tag-row">
             <div class="tag-label">language</div>
             <div class="tags">
-              <span class="tag">Ukrainian</span>
-              <span class="tag">English</span>
-              <span class="tag">Switzerland</span>
+              <span class="tag">{filmInfo.languages[0]}</span>
+              <span class="tag">{filmInfo.languages[1]}</span>
             </div>
           </div>
 
           <div class="trailers">
             <div class="trailer-item">
-              <img src="trailer1.jpg" alt="Trailer 1" />
+              <img src="/" alt="Trailer 1" />
             </div>
             <div class="trailer-item">
-              <img src="trailer2.jpg" alt="Trailer 2" />
+              <img src="/" alt="Trailer 2" />
             </div>
             <div class="trailer-item">
-              <img src="trailer3.jpg" alt="Trailer 3" />
+              <img src="/" alt="Trailer 3" />
             </div>
           </div>
         </section>
@@ -120,24 +119,32 @@ const Review = ({
 
             <div class="shows-block">
               <h3 class="subsection-title">shows</h3>
-              <ul class="show-list">
-                <li class="show-item">
+              <div class="show-list">
+                <div class="show-item">
                   <span class="show-name">Rick and Morty</span>
-                  <span class="show-rating">⭐ 4★</span>
-                </li>
-                <li class="show-item">
+                  <img src="/Star.svg" alt="star" />
+                  <span class="show-rating-big">4</span>
+                  <span class="show-rating-small">/5</span>
+                </div>
+                <div class="show-item">
                   <span class="show-name">3 Body Problem</span>
-                  <span class="show-rating">⭐ 5★</span>
-                </li>
-                <li class="show-item">
+                  <img src="/Star.svg" alt="star" />
+                  <span class="show-rating-big">5</span>
+                  <span class="show-rating-small">/5</span>
+                </div>
+                <div class="show-item">
                   <span class="show-name">The White Lotus</span>
-                  <span class="show-rating">⭐ 4.5★</span>
-                </li>
-                <li class="show-item selected">
+                  <img src="/Star.svg" alt="star" />
+                  <span class="show-rating-big">4.5</span>
+                  <span class="show-rating-small">/5</span>
+                </div>
+                <div class="show-item selected">
                   <span class="show-name">Sherlock</span>
-                  <span class="show-rating">⭐ 3.5★</span>
-                </li>
-              </ul>
+                  <img src="/Star.svg" alt="star" />
+                  <span class="show-rating-big">3.5</span>
+                  <span class="show-rating-small">/5</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>

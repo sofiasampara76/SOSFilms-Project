@@ -1,13 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/NavBar.css";
 import { Link } from "react-router-dom";
 
-const NavBarMainPage = () => {
+const NavBarMainPage = ({ onSelectType }) => {
+  const [selected, setSelected] = useState("shows");
+
+  const handleSelect = (type) => {
+    setSelected(type);
+    onSelectType(type); // Notify parent to change view
+  };
   return (
     <>
+      <img
+        className="filter-icon"
+        src="/filter-icon.svg"
+        alt="Filter icon"
+      ></img>
+      <p className="navbar-text">Filter</p>
+
       <div className="navbar-biggest-container">
         <div className="navbar-container">
-          <div className="navbar-item">
+          <div className="navbar-item" onClick={() => alert("Filter clicked")}>
             <img
               className="filter-icon"
               src="/filter-icon.svg"
@@ -15,16 +28,10 @@ const NavBarMainPage = () => {
             ></img>
             <p className="navbar-text">Filter</p>
           </div>
-          <div className="navbar-item">
-=======
-    <div className="navbar-biggest-container">
-      <div className="navbar-container">
-        <div className="navbar-item" onClick={() => alert("Filter clicked")}>
-          <img className="filter-icon" src="/filter-icon.svg" alt="Filter icon"></img>
-          <p className="navbar-text">Filter</p>
-        </div>
-        <div className="navbar-item" onClick={() => alert("Favourite clicked")}>
->>>>>>> e050a76c7b85bdc1afdb4ab0678839972c29cb88
+          <div
+            className="navbar-item"
+            onClick={() => alert("Favourite clicked")}
+          >
             <img src="/heart-btn.svg" alt="Favourite icon"></img>
             <p className="navbar-text">Favourite</p>
           </div>
@@ -42,33 +49,22 @@ const NavBarMainPage = () => {
         <div className="profile-icon-container">
           <img src="/profile-icon.svg" alt="Profile Icon"></img>
         </div>
-      </div>
-<<<<<<< HEAD
-      <div className="series-films-slider">
-        <div className="series-container">
-          <p>series</p>
+
+        <div
+          className="profile-icon-container"
+          onClick={() => alert("Profile clicked")}
+        >
+          <img src="/profile-icon.svg" alt="Profile Icon"></img>
         </div>
-        <div className="films-container">
-=======
-      <div className="profile-icon-container" onClick={() => alert("Profile clicked")}>
-        <img src="/profile-icon.svg" alt="Profile Icon"></img>
       </div>
-    </div>
-    <div className="series-films-slider">
+      <div className="series-films-slider">
         <div
           className={`slider-indicator ${selected === "shows" ? "left" : "right"}`}
         />
-        <div
-          className="series-container"
-          onClick={() => handleSelect("shows")}
-        >
+        <div className="series-container" onClick={() => handleSelect("shows")}>
           <p>series</p>
         </div>
-        <div
-          className="films-container"
-          onClick={() => handleSelect("films")}
-        >
->>>>>>> e050a76c7b85bdc1afdb4ab0678839972c29cb88
+        <div className="films-container" onClick={() => handleSelect("films")}>
           <p>films</p>
         </div>
       </div>
