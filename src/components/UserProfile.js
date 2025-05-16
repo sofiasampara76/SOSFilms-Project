@@ -1,5 +1,69 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../styles/UserProfile.css';
+
+function RenderFilms({ favoriteFilms }) {
+  const [startIndex, setStartIndex] = useState(0);
+  const pageSize = 2;
+
+  const handleNext = () => {
+    const nextStart = (startIndex + 1) % favoriteFilms.length;
+    setStartIndex(nextStart);
+  };
+
+  const visibleFilms = [
+    favoriteFilms[startIndex],
+    favoriteFilms[(startIndex + 1) % favoriteFilms.length],
+  ];
+  
+
+  return (
+    <div className="film-section">
+      <ul className="film-grid">
+        {visibleFilms.map((film, idx) => (
+          <li key={idx} className="show-item show-item-film">
+            <img src={film.image} alt={film.title} className="film-poster" />
+            <p className="text-sm">{film.title}</p>
+            <div className="remove-box">
+              <img src="/unlike.svg" alt="Remove" className="remove-heart" />
+            </div>
+          </li>
+        ))}
+
+        <div className="arrow-down-container" onClick={handleNext}>
+          <img src="/arrow_right.png" alt="Next" className="arrow-down-icon" />
+        </div>
+      </ul>
+    </div>
+  );
+}
+
+
+function renderShows(favoriteShows) {
+  return (
+    <ul className="show-list">
+      {favoriteShows.map((show, idx) => (
+        <li key={idx} className="show-item">
+          <div className="show-content">
+            <p className="font-semibold text-sm">{show.title}</p>
+            <div className="show-rating">
+              <img src="/star.svg" alt="Rating" className="star-icon" />
+              <span className="rating">
+                {show.rating}
+                <span className="out-of-5">/5</span>
+              </span>
+            </div>
+          </div>
+          <div className="remove-box">
+            <img src="/unlike.svg" alt="Remove" className="remove-heart" />
+          </div>
+        </li>
+      ))}
+      <div className="arrow-down-container">
+        <img src="/arrow-down.svg" alt="Show More" className="arrow-down-icon" />
+      </div>
+    </ul>
+  );
+}
 
 const UserProfile = () => {
   const backgroundUrl = "/ginny-and-georgia.png";
@@ -21,6 +85,9 @@ const UserProfile = () => {
     { title: 'SHERLOCK', rating: 3.5 },
   ];
 
+  const [isCardView1, setIsCardView1] = useState(true);
+  const [isCardView2, setIsCardView2] = useState(true);
+
   return (
     <div className="page-wrapper">
       <div
@@ -35,9 +102,9 @@ const UserProfile = () => {
           <h2 className="favorite-title">personal information</h2>
           <div className="info-card">
             <div className="info-row">
-            <div className="icon-wrapper">
-              <img src="/person-icon.svg" alt="User Icon" className="person-icon" />
-            </div>
+              <div className="icon-wrapper">
+                <img src="/person-icon.svg" alt="User Icon" className="person-icon" />
+              </div>
               <div className="text-left">
                 <p className="font-bold">name: <span className='inside-font-bold'>{user.name}</span></p>
                 <p className="font-bold">mail: <span className='inside-font-bold'>{user.email}</span></p>
@@ -51,51 +118,51 @@ const UserProfile = () => {
         <div className="favorite-section">
           <div className="left-favorite-section">
             <div className="orientation">
-              <img className="" src="/list1.png" alt="Choosing oriantation of showing favoutite films" />
-              <img className="" src="/list2.png" alt="Choosing oriantation of showing favoutite films" />
+              <img
+                src="/list1.png"
+                alt="Card View"
+                onClick={() => setIsCardView1(true)}
+                className={isCardView1 ? 'active-icon' : ''}
+              />
+              <img
+                src="/list2.png"
+                alt="List View"
+                onClick={() => setIsCardView1(false)}
+                className={!isCardView1 ? 'active-icon' : ''}
+              />
             </div>
+
             <div className="film-section">
-                <h3 className="film-title">films</h3>
-                <ul className="film-grid">
-                {favoriteFilms.map((film, idx) => (
-                  <li key={idx} className="show-item show-item-film">
-                    <img src={film.image} alt={film.title} className="film-poster" />
-                    <p className="text-sm">{film.title}</p>
-                    <div className="remove-box">
-                      <img src="/unlike.svg" alt="Remove" className="remove-heart" />
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              </div>
-            </div>
-            <div className="show-section">
-            <h3 className="show-title">shows</h3>
-            {/* </div> */}
-
-            <ul className="show-list">
-              {favoriteShows.map((show, idx) => (
-                <li key={idx} className="show-item">
-                  <div className="show-content">
-                    <p className="font-semibold text-sm">{show.title}</p>
-                    <div className="show-rating">
-                      <img src="/star.svg" alt="Rating" className="star-icon" />
-                      <span className="rating">{show.rating}<span className="out-of-5">/5</span></span>
-                    </div>
-                  </div>
-                  <div className="remove-box">
-                    <img src="/unlike.svg" alt="Remove" className="remove-heart" />
-                  </div>
-                </li>
-              
-              ))}
-            </ul>
-
-            <div className="arrow-down-container">
-              <img src="/arrow-down.svg" alt="Show More" className="arrow-down-icon" />
+              <h3 className="film-title">films</h3>
+              {isCardView1 ? <RenderFilms favoriteFilms={favoriteFilms} /> : renderShows(favoriteFilms)}
             </div>
           </div>
 
+          <div className="left-favorite-section">
+            <div className="orientation">
+              <img
+                src="/list1.png"
+                alt="Card View"
+                onClick={() => setIsCardView2(true)}
+                className={isCardView2 ? 'active-icon' : ''}
+              />
+              <img
+                src="/list2.png"
+                alt="List View"
+                onClick={() => setIsCardView2(false)}
+                className={!isCardView2 ? 'active-icon' : ''}
+              />
+            </div>
+
+            <div className="film-section">
+              <h3 className="film-title">shows</h3>
+              {isCardView2 ? <RenderFilms favoriteFilms={favoriteShows} /> : renderShows(favoriteShows)}
+            </div>
+          </div>
+
+            {/* <div className="arrow-down-container">
+              <img src="/arrow-down.svg" alt="Show More" className="arrow-down-icon" />
+            </div> */}
           </div>
         </div>
       </div>
