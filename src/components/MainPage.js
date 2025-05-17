@@ -167,7 +167,6 @@ const MainPage = () => {
                       const isMatch = await bcrypt.compare(password, user.password);
 
                       if (isMatch) {
-                        alert("Login successful!");
                         localStorage.setItem("user", JSON.stringify(user));
                         setShowModal(false);
                       } else {
@@ -219,7 +218,6 @@ const MainPage = () => {
                         throw new Error("Failed to register user");
                       }
 
-                      alert("Registration successful!");
                       localStorage.setItem("user", JSON.stringify({ name, email }));
 
                       e.target.reset();
