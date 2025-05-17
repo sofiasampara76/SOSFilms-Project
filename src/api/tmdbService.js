@@ -1,54 +1,54 @@
-import axios from 'axios';
+import axios from "axios";
 
-const API_KEY = '470ea91bf1aa61d1fa3e936268faa25e';
-const API_BASE = 'https://api.themoviedb.org/3';
-const IMAGE_BASE = 'https://image.tmdb.org/t/p';
+const API_KEY = "470ea91bf1aa61d1fa3e936268faa25e";
+const API_BASE = "https://api.themoviedb.org/3";
+const IMAGE_BASE = "https://image.tmdb.org/t/p";
 
 const tmdb = axios.create({
   baseURL: API_BASE,
   params: {
     api_key: API_KEY,
-    language: 'en-UK'
-  }
+    language: "en-UK",
+  },
 });
 
 let movieGenreMap = {};
-let tvGenreMap    = {};
+let tvGenreMap = {};
 
 async function ensureGenreMap() {
   if (Object.keys(movieGenreMap).length === 0) {
-    const { data } = await tmdb.get('/genre/movie/list');
-    movieGenreMap = data.genres.reduce((m, g) => (m[g.id] = g.name, m), {});
+    const { data } = await tmdb.get("/genre/movie/list");
+    movieGenreMap = data.genres.reduce((m, g) => ((m[g.id] = g.name), m), {});
   }
   if (Object.keys(tvGenreMap).length === 0) {
-    const { data } = await tmdb.get('/genre/tv/list');
-    tvGenreMap = data.genres.reduce((m, g) => (m[g.id] = g.name, m), {});
+    const { data } = await tmdb.get("/genre/tv/list");
+    tvGenreMap = data.genres.reduce((m, g) => ((m[g.id] = g.name), m), {});
   }
 }
 
 export async function fetchAllMovies(page = 1) {
   await ensureGenreMap();
-  const { data } = await tmdb.get('/discover/movie', { params: { page } });
+  const { data } = await tmdb.get("/discover/movie", { params: { page } });
   return {
-    results: data.results.map(item => ({
+    results: data.results.map((item) => ({
       ...item,
       poster: item.poster_path ? `${IMAGE_BASE}/w500${item.poster_path}` : null,
-      genres: item.genre_ids.map(id => movieGenreMap[id] || 'Unknown')
+      genres: item.genre_ids.map((id) => movieGenreMap[id] || "Unknown"),
     })),
-    total_pages: data.total_pages
+    total_pages: data.total_pages,
   };
 }
 
 export async function fetchAllTVShows(page = 1) {
   await ensureGenreMap();
-  const { data } = await tmdb.get('/discover/tv', { params: { page } });
+  const { data } = await tmdb.get("/discover/tv", { params: { page } });
   return {
-    results: data.results.map(item => ({
+    results: data.results.map((item) => ({
       ...item,
       poster: item.poster_path ? `${IMAGE_BASE}/w500${item.poster_path}` : null,
-      genres: item.genre_ids.map(id => tvGenreMap[id] || 'Unknown')
+      genres: item.genre_ids.map((id) => tvGenreMap[id] || "Unknown"),
     })),
-    total_pages: data.total_pages
+    total_pages: data.total_pages,
   };
 }
 
@@ -69,8 +69,6 @@ export async function fetchMostPopularShow() {
   const details = await fetchMovieDetails(movie.id);
   return details;
 }
-
-
 
 // export async function fetchAllTVShows(page = 1) {
 //   const { data } = await tmdb.get('/discover/tv', {
@@ -105,7 +103,7 @@ export async function fetchAllMoviesAllPages(limitPages = 2) {
   for (let p = 1; p <= limitPages; p++) {
     const { results } = await fetchAllMovies(p);
     all.push(...results);
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 200));
   }
   console.log("Fetched movies (limited):", all.length);
   return all;
@@ -117,12 +115,11 @@ export async function fetchAllTVShowsAllPages(limitPages = 2) {
   for (let p = 1; p <= limitPages; p++) {
     const { results } = await fetchAllTVShows(p);
     all.push(...results);
-    await new Promise(r => setTimeout(r, 200));
+    await new Promise((r) => setTimeout(r, 200));
   }
   console.log("Fetched shows (limited):", all.length);
   return all;
 }
-
 
 // export async function fetchAllTVShowsAllPages() {
 //   const all = [];
@@ -140,11 +137,11 @@ export async function fetchAllTVShowsAllPages(limitPages = 2) {
 // }
 
 export async function fetchMoviesByGenre(genreId, page = 1) {
-  const { data } = await tmdb.get('/discover/movie', {
+  const { data } = await tmdb.get("/discover/movie", {
     params: {
       with_genres: genreId,
-      page
-    }
+      page,
+    },
   });
   return data.results;
 }
@@ -152,20 +149,22 @@ export async function fetchMoviesByGenre(genreId, page = 1) {
 export async function fetchMovieDetails(movieId) {
   const { data } = await tmdb.get(`/movie/${movieId}`, {
     params: {
-      append_to_response: 'videos,credits,images'
-    }
+      append_to_response: "videos,credits,images",
+    },
   });
 
   return {
     id: data.id,
     title: data.title,
     originalTitle: data.original_title,
-    overview: data.overview,
+    description: data.overview,
     releaseDate: data.release_date,
-    runtime: data.runtime,
+    duration: data.runtime,
     status: data.status,
-    genres: data.genres.map(g => g.name),
+    genres: data.genres.map((g) => g.name),
     rating: data.vote_average,
+    languages: data.spoken_languages.map((lang) => lang.english_name),
+    officialpage: data.homepage,
     poster: data.poster_path
       ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
       : null,
@@ -174,20 +173,20 @@ export async function fetchMovieDetails(movieId) {
       : null,
 
     trailers: data.videos.results
-      .filter(v => v.site === 'YouTube' && v.type === 'Trailer')
-      .map(v => `https://www.youtube.com/watch?v=${v.key}`),
+      .filter((v) => v.site === "YouTube" && v.type === "Trailer")
+      .map((v) => `https://www.youtube.com/watch?v=${v.key}`),
 
-    cast: data.credits.cast.map(c => ({
+    cast: data.credits.cast.map((c) => ({
       id: c.id,
       name: c.name,
       character: c.character,
       profile: c.profile_path
         ? `https://image.tmdb.org/t/p/w185${c.profile_path}`
-        : null
+        : null,
     })),
 
-    images: data.images.backdrops.map(img => ({
-      url: `https://image.tmdb.org/t/p/w780${img.file_path}`
-    }))
+    images: data.images.backdrops.map((img) => ({
+      url: `https://image.tmdb.org/t/p/w780${img.file_path}`,
+    })),
   };
 }

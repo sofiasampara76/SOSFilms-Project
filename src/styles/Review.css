@@ -143,7 +143,7 @@ html {
 
 .film-main-poster {
     width: 100%;
-    max-width: 500px;
+    max-width: 250px;
     aspect-ratio: 1/1.5;
     object-fit: cover;
     border-radius: 0;
@@ -169,7 +169,7 @@ html {
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    max-width: 190px;
+    max-width: 245px;
     padding: 10px 0 20px 0;
     margin: 0 auto;
 }
@@ -220,7 +220,7 @@ html {
 .film-type {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.75);
-    margin: 10px 0 3px 0;
+    margin: 0 0 -10px 0;
     opacity: 0.78;
     align-self: flex-start;
 }
@@ -230,14 +230,16 @@ html {
     font-weight: 650;
     color: rgba(255, 255, 255, 1);
     max-width: 200px;
-    color: #fff;
     text-shadow: 0 2px 16px #42226650;
     align-self: flex-start;
+    text-align: left;
+    margin-left: 0;
 }
 
 .remove-btn {
     position: absolute;
     right: 20px;
+    margin-top: 20px;
     border: none;
     opacity: 0.72;
     transition: opacity 0.18s;
@@ -248,12 +250,9 @@ html {
 
 .film-unlike-title {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     width: 100%;
-    margin-top: 5px;
-    margin-bottom: 0;
     padding: 0 18px;
 }
 
