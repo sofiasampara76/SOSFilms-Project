@@ -13,6 +13,8 @@ const MainPage = () => {
   const [viewType, setViewType] = useState("series");
   const [popular, setPopular] = useState(null);
   const [popularShow, setPopularShow] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [authMode, setAuthMode] = useState("login")
 
   useEffect(() => {
     fetchMostPopularMovie()
@@ -74,11 +76,18 @@ const MainPage = () => {
   console.log("MainPage — trailerUrl (film):", trailerUrl);
   console.log("MainPage — trailerShowUrl (show):", trailerShowUrl);
 
+  const handleOpenModal = () => setShowModal(true);
+  const handleCloseModal = () => setShowModal(false);
+
   return (
     <>
       <section className="popular-now-container">
         <img className="logo-image" src="/SOSFilms.svg" alt="Logo"></img>
-        {/* Blurred Background */}
+        
+        <button className="login-btn" onClick={handleOpenModal}>
+            Log In / Register
+        </button>
+
         <div
           className="popular-now-bg"
           style={{
@@ -117,8 +126,118 @@ const MainPage = () => {
         </div>
       </section>
       <MainSlider backgroundUrl={backgroundUrl2} onSelectType={setViewType} />
+      {showModal && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="auth-toggle">
+              <button
+                className={authMode === "login" ? "active-auth-tab" : ""}
+                onClick={() => setAuthMode("login")}
+              >
+                Log In
+              </button>
+              <button
+                className={authMode === "register" ? "active-auth-tab" : ""}
+                onClick={() => setAuthMode("register")}
+              >
+                Register
+              </button>
+            </div>
+            {authMode === "login" ? (
+              <>
+                <h2>Log In</h2>
+                <form
+                  className="register-form"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const email = e.target.email.value;
+                    const password = e.target.password.value;
+
+                    try {
+                      const response = await fetch(`http://localhost:3005/users?email=${email}`);
+                      const users = await response.json();
+
+                      if (users.length === 0) {
+                        alert("User not found");
+                        return;
+                      }
+
+                      const user = users[0];
+                      const bcrypt = await import('bcryptjs');
+                      const isMatch = await bcrypt.compare(password, user.password);
+
+                      if (isMatch) {
+                        alert("Login successful!");
+                        localStorage.setItem("user", JSON.stringify(user));
+                        setShowModal(false);
+                      } else {
+                        alert("Incorrect password");
+                      }
+                    } catch (err) {
+                      console.error("Login error:", err);
+                      alert("Login failed");
+                    }
+                  }}
+                >
+                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="password" name="password" placeholder="Password" required />
+                  <button type="submit">Log In</button>
+                  <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
+                </form>
+
+              </>
+            ) : (
+              <>
+                <h2>Register</h2>
+                <form
+                  className="register-form"
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const email = e.target.email.value;
+                    const password = e.target.password.value;
+                    const confirmPassword = e.target.confirmPassword.value;
+
+                    if (password !== confirmPassword) {
+                      alert("Passwords do not match");
+                      return;
+                    }
+
+                    try {
+                      const bcrypt = await import('bcryptjs');
+                      const hashedPassword = await bcrypt.hash(password, 10);
+
+                      await fetch("http://localhost:3005/users", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ email, password: hashedPassword })
+                      });
+
+                      alert("Registration successful!");
+                      e.target.reset();
+                      setShowModal(false);
+                    } catch (err) {
+                      console.error("Registration error:", err);
+                      alert("Registration failed");
+                    }
+                  }}
+                >
+                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="password" name="password" placeholder="Password" required />
+                  <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
+                  <button type="submit">Register</button>
+                  <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
+                </form>
+
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </>
   );
+
   // return (
   //   <>
   //   <FilmsSlider backgroundUrl={backgroundUrl2}/>
