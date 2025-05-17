@@ -1,169 +1,53 @@
-.popular-now-bg {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  filter: blur(30px);
-  transform: scale(1.1);
-  z-index: 0;
-}
+import React from 'react';
+import '../styles/UserProfile.css';
+import { FilmSection } from './Favourites';
 
-.page-wrapper {
-  position: relative;
-  min-height: auto;
-  overflow: hidden;
-  font-family: sans-serif;
-  color: white;
-  padding: 2rem;
-}
+const UserProfile = () => {
+  const backgroundUrl = "/ginny-and-georgia.png";
 
-.overlay {
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 0;
-}
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
-.main-content {
-  position: relative;
-  z-index: 1;
-}
+  return (
+    <div className="page-wrapper">
+      <div
+        className="popular-now-bg"
+        style={{ backgroundImage: `url(${backgroundUrl})` }}
+      ></div>
+      <div className="overlay"></div>
+      <img className="logo-image" src="/SOSFilms.svg" alt="Logo" />
 
-.logo-image {
-  display: block;
-  margin: 0 auto 1rem auto;
-}
+      <div className="main-content">
+        <div className="personal-section">
+          <h2 className="favorite-title">personal information</h2>
+          {user ? (
+            <div className="info-card">
+              <div className="info-row">
+                <div className="icon-wrapper">
+                  <img src="/person-icon.svg" alt="User Icon" className="person-icon" />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold">
+                    name: <span className='inside-font-bold'>{user.name || "Anonymous"}</span>
+                  </p>
+                  <p className="font-bold">
+                    mail: <span className='inside-font-bold'>{user.email}</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <p className="font-bold">Please log in to view profile.</p>
+          )}
 
-.info-row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
-}
+        </div>
 
-@media (min-width: 640px) {
-  .info-row {
-    flex-direction: row;
-    justify-content: center;
-  }
-}
-
-.info-card {
-  background-color: rgba(255, 255, 255, 0.4);
-  border-radius: 1rem;
-  padding: 1.5rem;
-  width: 50%;
-  height: 20%;
-  margin: 0 auto 3rem auto;
-  text-align: center;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
+        <h2 className="favorite-title">favorite</h2>
+        <FilmSection/>
+        </div>
+      </div>
+  );
+};
 
 
-
-.favorite-title {
-  font-size: 1.13rem;
-  font-weight: 600;
-  color: #fff;
-  text-align: center;
-  margin-bottom: 1.5rem;
-}
-
-.personal-section {
-  margin-top: 5rem;
-  margin-bottom: 3rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.person-icon {
-  width: 80%;
-  height: auto;
-  filter: brightness(0) invert(1);
-}
-
-.icon-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.font-bold {
-  font-weight: 700;
-  font-family: 'Madimi One', sans-serif;
-  font-size: 1rem;
-  color: white;
-}
-
-.inside-font-bold {
-  font-size: 1.5rem;
-  color: white;
-  letter-spacing: 0.3px;
-}
-
-.show-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.orientation {
-  margin: 0 auto 1rem auto;
-  display: flex;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 0.75rem;
-  padding: 0.75rem 1rem;
-  width: 10%;
-  justify-content: center;
-}
-
-.orientation img {
-  width: 70%;
-  height: 70%;
-  cursor: pointer;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
-}
-
-.orientation img:hover {
-  opacity: 1;
-}
-
-.arrow-film-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 10rem;
-  height: 15rem;
-  border-radius: 0.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.arrow-film-card:hover {
-  transform: translateX(3px);
-}
-
-.arrow-film-icon {
-  width: 40px;
-  height: 40px;
-  opacity: 0.8;
-  transition: opacity 0.2s ease;
-}
-
-.arrow-film-icon:hover {
-  opacity: 1;
-}
-
-.active-icon {
-  background-color: rgba(255, 255, 255, 0.4);
-  opacity: 1;
-  filter: drop-shadow(0 0 4px white);
-  transform: scale(1.1);
-}
+export default UserProfile;
