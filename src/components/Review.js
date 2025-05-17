@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "../styles/Review.css";
 import { useLocation } from "react-router-dom";
 
@@ -6,150 +6,382 @@ const Review = () => {
   const location = useLocation();
   const filmInfo = location.state?.filmInfo;
 
-  if (!filmInfo) return <div>No film data provided!</div>;
+  // View toggles
+  const [filmsView, setFilmsView] = useState("card"); // "card" or "list"
+  const [showsView, setShowsView] = useState("list"); // "card" or "list"
+
+  const film = filmInfo || {
+    status: "to be determined",
+    officialPage: "#",
+    poster: "/minecraft.jpg",
+    releaseDate: "2025",
+    rating: "4",
+    duration: "1h 41m",
+    title: "MINECRAFT MOVIE",
+    description:
+      "Four misfits are suddenly pulled through a mysterious portal into a bizarre cubic wonderland that thrives on imagination. To get back home they'll have to master this world while embarking on a quest with an unexpected expert crafter.",
+    genres: ["comedy", "adventure", "action"],
+    languages: ["Ukrainian", "English", "Switzerland"],
+    trailers: ["/trailer1.jpg", "/trailer2.jpg", "/trailer3.jpg"],
+  };
+
+  // Example "more like this" data
+  const films = [
+    {
+      title: "HOW TO TRAIN YOUR DRAGON",
+      image: "/how-to-train.jpg",
+      rating: 4,
+    },
+    {
+      title: "MINECRAFT MOVIE",
+      image: "/minecraft.jpg",
+      rating: 4.5,
+    },
+  ];
+
+  const shows = [
+    { title: "RICK AND MORTY", rating: 4 },
+    { title: "3 BODY PROBLEM", rating: 5 },
+    { title: "THE WHITE LOTUS", rating: 4.5 },
+    { title: "SHERLOCK", rating: 3.5 },
+    { title: "HAHA", rating: 6.5 },
+  ];
+
+  // SHOWS SLIDER: 3 visible at a time (change to 4 if you prefer)
+  const [showStart, setShowStart] = useState(0);
+  const visibleShows = shows.slice(showStart, showStart + 3);
+  const handleNextShows = () => {
+    setShowStart((prev) => {
+      if (shows.length <= 3) return 0;
+      // If at end, go to start; else advance by 1
+      return (prev + 1) % (shows.length - 2);
+    });
+  };
+
+  const [filmStart, setFilmStart] = useState(0);
+  const visibleFilms = films.slice(filmStart, filmStart + 2);
+  const handleNextFilms = () => {
+    setFilmStart((prev) => {
+      if (films.length <= 2) return 0;
+      // If at end, go to start; else advance by 1
+      return (prev + 1) % (films.length - 1);
+    });
+  };
+
+  // Remove button handler
+  const handleRemove = (title) => alert(`Remove "${title}" from favorites?`);
+  // Play trailer handler
+  const handlePlayTrailer = (i) => alert(`Play trailer ${i + 1}`);
+
+  const scrollSlider = (classname, direction = "right") => {
+    const slider = document.querySelector(`.${classname}`);
+    if (slider) {
+      slider.scrollLeft += direction === "left" ? -160 : 160;
+    }
+  };
+
   return (
-    <section>
-      {/* <div
-        className="review-section"
-        style={{ backgroundImage: `url(${backgroundUrl})` }}
-      />
-      <img className="logo-image" src="/SOSFilms.svg" alt="Logo"></img>
-      <div className="review-div">
-        <h1 className="review-h1">Review</h1>
-        <p className="review-p">
-          This is the Review page of our awesome project!
-        </p>
-      </div> */}
-
-      {/* <div
-        className="review-section"
-        style={{ backgroundImage: `url(${backgroundUrl})` }}
-      /> */}
-
-      {/* LOGO */}
-      <header class="review-header">
-        <img className="logo-image" src="/SOSFilms.svg" alt="Logo"></img>
+    <div className="review-bg">
+      {/* Logo */}
+      <header className="review-header">
+        <img className="logo-image" src="/SOSFilms.svg" alt="Logo" />
       </header>
 
-      <main class="review-layout">
-        {/* FILM CARD */}
-        <section class="film-card">
-          <div class="card-header">
-            <span class="status-badge">{filmInfo.status}</span>
-            <span class="official-page-badge">
-              <a
-                href={filmInfo.officialPage}
-                style={{ textDecoration: "none", color: "black" }}
+      {/* Main upper grid */}
+      <div className="review-main-grid">
+        {/* Film card */}
+        <section className="film-card glassy">
+          <div className="card-header">
+            <div className="status-row">
+              <span className="status-badge-main">status</span>
+              <span
+                className="status-badge-value"
+                style={{
+                  background:
+                    film.status && film.status.toLowerCase().trim() === "ended"
+                      ? "rgba(77,255,0,0.2)"
+                      : "rgba(255,0,255,0.2)",
+                }}
               >
-                Official Page
-              </a>
-            </span>
+                {film.status && film.status.toLowerCase().trim() === "ended"
+                  ? "ended"
+                  : "to be determined"}
+              </span>
+            </div>
+            <a
+              className="official-page-badge"
+              href={film.officialPage}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              official page
+            </a>
           </div>
-
-          <div class="poster-container">
-            <img
-              src={filmInfo.poster}
-              alt="Minecraft Movie Poster"
-              class="film-poster"
-            />
-
-            <div class="release-date">{filmInfo.releaseDate}</div>
-          </div>
-
-          <div class="card-meta">
-            <span class="year">{filmInfo.releaseYear}</span>
-            <img src="/Star.svg" alt="Star Rating" class="rating-icon" />
-            <span class="rating">{filmInfo.rating}</span>
-            <span class="duration">{filmInfo.duration}</span>
-          </div>
-
-          <div class="film-title">{filmInfo.title}</div>
-        </section>
-
-        <section class="about-section">
-          <h2 class="section-title">about</h2>
-          <p class="description">{filmInfo.description}</p>
-
-          <div class="tag-row">
-            <div class="tag-label">genres</div>
-            <div class="tags">
-              <span class="tag">{filmInfo.genres[0]}</span>
-              <span class="tag">{filmInfo.genres[1]}</span>
+          <div className="film-poster-meta-block">
+            <img src={film.poster} alt="Poster" className="film-main-poster" />
+            <div className="film-meta-row">
+              <span className="film-meta-year">{film.releaseDate}</span>
+              <span className="film-meta-rating">
+                <img
+                  src="/star.svg"
+                  alt="Rating Star"
+                  className="film-meta-star"
+                />
+                <span className="film-meta-rating-value">
+                  {film.rating}
+                  <span className="film-meta-rating-max">/5</span>
+                </span>
+              </span>
+              <span className="film-meta-duration">{film.duration}</span>
             </div>
           </div>
-
-          <div class="tag-row">
-            <div class="tag-label">language</div>
-            <div class="tags">
-              <span class="tag">{filmInfo.languages[0]}</span>
-              <span class="tag">{filmInfo.languages[1]}</span>
-            </div>
-          </div>
-
-          <div class="trailers">
-            <div class="trailer-item">
-              <img src="/" alt="Trailer 1" />
-            </div>
-            <div class="trailer-item">
-              <img src="/" alt="Trailer 2" />
-            </div>
-            <div class="trailer-item">
-              <img src="/" alt="Trailer 3" />
-            </div>
+          <div className="film-type">film</div>
+          <div className="film-unlike-title">
+            <div className="film-title">{film.title}</div>
+            <button
+              className="remove-btn"
+              title="Remove from favorites"
+              onClick={() => handleRemove(film.title)}
+            >
+              {/* Use your icon */}
+              <img
+                src="/unlike.svg"
+                alt="Remove"
+                style={{ width: "25px", height: "29px" }}
+              />
+            </button>
           </div>
         </section>
 
-        <section class="more-like-this">
-          <h2 class="section-title">more like this</h2>
-
-          <div class="recommendations">
-            <div class="films-block">
-              <h3 class="subsection-title">films</h3>
-              <div class="film-list">
-                <div class="film-item">
-                  <img src="how-to-train.jpg" alt="How to Train Your Dragon" />
-                  <div class="film-title">How to Train Your Dragon</div>
+        {/* About */}
+        <section className="about glassy">
+          <span className="about-title">about</span>
+          <span className="about-desc-title">description</span>
+          <p className="about-desc">{film.description}</p>
+          <div className="about-row about-row-2col">
+            <div className="about-col">
+              <span className="about-label">genres</span>
+              <div className="tags-slider-container">
+                <button
+                  className="tags-arrow tags-arrow-left"
+                  tabIndex={-1}
+                  onClick={() => scrollSlider("genres-slider", "left")}
+                >
+                  <img src="/left-arrow.svg" alt="left arrow" />
+                </button>
+                <div className="tags-slider genres-slider" tabIndex={0}>
+                  {(film.genres || []).map((tag, i) => (
+                    <span className="tag-pill" key={i}>
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-                <div class="film-item">
-                  <img src="minecraft.jpg" alt="Minecraft Movie" />
-                  <div class="film-title">Minecraft Movie</div>
-                </div>
+                <button
+                  className="tags-arrow tags-arrow-right"
+                  tabIndex={-1}
+                  onClick={() => scrollSlider("genres-slider", "right")}
+                >
+                  <img src="/right-arrow.svg" alt="right arrow" />
+                </button>
               </div>
             </div>
-
-            <div class="shows-block">
-              <h3 class="subsection-title">shows</h3>
-              <div class="show-list">
-                <div class="show-item">
-                  <span class="show-name">Rick and Morty</span>
-                  <img src="/Star.svg" alt="star" />
-                  <span class="show-rating-big">4</span>
-                  <span class="show-rating-small">/5</span>
+            <div className="about-col">
+              <span className="about-label">language</span>
+              <div className="tags-slider-container">
+                <button
+                  className="tags-arrow tags-arrow-left"
+                  tabIndex={-1}
+                  onClick={() => scrollSlider("languages-slider", "left")}
+                >
+                  <img src="/left-arrow.svg" alt="left arrow" />
+                </button>
+                <div className="tags-slider languages-slider" tabIndex={0}>
+                  {(film.languages || []).map((tag, i) => (
+                    <span className="tag-pill" key={i}>
+                      {tag}
+                    </span>
+                  ))}
                 </div>
-                <div class="show-item">
-                  <span class="show-name">3 Body Problem</span>
-                  <img src="/Star.svg" alt="star" />
-                  <span class="show-rating-big">5</span>
-                  <span class="show-rating-small">/5</span>
-                </div>
-                <div class="show-item">
-                  <span class="show-name">The White Lotus</span>
-                  <img src="/Star.svg" alt="star" />
-                  <span class="show-rating-big">4.5</span>
-                  <span class="show-rating-small">/5</span>
-                </div>
-                <div class="show-item selected">
-                  <span class="show-name">Sherlock</span>
-                  <img src="/Star.svg" alt="star" />
-                  <span class="show-rating-big">3.5</span>
-                  <span class="show-rating-small">/5</span>
-                </div>
+                <button
+                  className="tags-arrow tags-arrow-right"
+                  tabIndex={-1}
+                  onClick={() => scrollSlider("languages-slider", "right")}
+                >
+                  <img src="/right-arrow.svg" alt="right arrow" />
+                </button>
               </div>
             </div>
           </div>
+          <div className="about-row about-trailers">
+            <div className="about-label">trailers</div>
+            <div className="trailers">
+              {(film.trailers || []).map((src, i) => (
+                <div className="trailer-thumb" key={i}>
+                  <img
+                    src={src}
+                    alt={`Trailer ${i + 1}`}
+                    className="trailer-img"
+                    onClick={() => handlePlayTrailer(i)}
+                  />
+                  <button
+                    className="play-btn"
+                    onClick={() => handlePlayTrailer(i)}
+                  >
+                    ▶
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
-      </main>
-    </section>
+      </div>
+
+      {/* More like this */}
+      <section
+        className="more-like-this glassy"
+        style={{ display: "flex", gap: "44px", justifyContent: "center" }}
+      >
+        <div style={{ flex: 1 }}>
+          <div className="mlt-header">
+            <span className="mlt-label">films</span>
+          </div>
+          <div className="mlt-toggles">
+            <button
+              className={`mlt-toggle-btn ${filmsView === "card" ? "active" : ""}`}
+              onClick={() => setFilmsView("card")}
+              title="Card View"
+            >
+              <img src="/two-rectangles.svg" alt="card view" />
+            </button>
+            <button
+              className={`mlt-toggle-btn ${filmsView === "list" ? "active" : ""}`}
+              onClick={() => setFilmsView("list")}
+              title="List View"
+            >
+              <img src="/list.svg" alt="list view" />
+            </button>
+          </div>
+          {filmsView === "card" ? (
+            <ul className="film-grid">
+              {visibleFilms.map((film, idx) => (
+                <li key={idx} className="show-item show-item-film">
+                  <img
+                    src={film.image}
+                    alt={film.title}
+                    className="film-poster"
+                  />
+                  <p className="film-title">{film.title}</p>
+                  <button
+                    className="remove-btn"
+                    onClick={() => handleRemove(film.title)}
+                  >
+                    <img
+                      src="/unlike.svg"
+                      alt="Remove"
+                      className="remove-heart"
+                    />
+                  </button>
+                </li>
+              ))}
+              {films.length > 2 && (
+                <li className="arrow-down-container" onClick={handleNextFilms}>
+                  <img
+                    src="/right-arrow.svg"
+                    alt="Next"
+                    className="arrow-down-icon"
+                  />
+                </li>
+              )}
+            </ul>
+          ) : (
+            <ul className="mlt-list">
+              {films.map((film, idx) => (
+                <li className="mlt-list-item" key={film.title}>
+                  <span className="mlt-list-title">{film.title}</span>
+                  <button
+                    className="remove-btn"
+                    onClick={() => handleRemove(film.title)}
+                  >
+                    <img
+                      src="/unlike.svg"
+                      alt="Remove"
+                      className="remove-heart"
+                    />
+                  </button>
+                  <img
+                    src="/right-arrow.svg"
+                    alt="Next"
+                    className="mlt-list-arrow"
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div style={{ flex: 1 }}>
+          <div className="mlt-header">
+            <span className="mlt-label">shows</span>
+          </div>
+          {showsView === "card" ? (
+            <ul className="show-list">
+              {visibleShows.map((show, idx) => (
+                <li key={idx} className="show-item">
+                  <div className="show-content">
+                    <span className="show-name">{show.title}</span>
+                    <img src="/star.svg" alt="Star" className="star-icon" />
+                    <span className="show-rating-big">{show.rating}/5</span>
+                  </div>
+                  <button
+                    className="remove-btn"
+                    onClick={() => handleRemove(show.title)}
+                  >
+                    <img
+                      src="/unlike.svg"
+                      alt="Remove"
+                      className="remove-heart"
+                    />
+                  </button>
+                </li>
+              ))}
+              {shows.length > 3 && (
+                <li className="arrow-down-container" onClick={handleNextShows}>
+                  <img
+                    src="/arrow-down.svg"
+                    alt="Show More"
+                    className="arrow-down-icon"
+                  />
+                </li>
+              )}
+            </ul>
+          ) : (
+            <ul className="mlt-list">
+              {shows.map((show, idx) => (
+                <li className="mlt-list-item" key={show.title}>
+                  <span className="mlt-list-title">{show.title}</span>
+                  <img src="/star.svg" alt="star" className="star-icon" />
+                  <span className="mlt-list-rating">{show.rating}/5</span>
+                  <button
+                    className="remove-btn"
+                    onClick={() => handleRemove(show.title)}
+                  >
+                    <img
+                      src="/unlike.svg"
+                      alt="Remove"
+                      className="remove-heart"
+                    />
+                  </button>
+                  <img
+                    src="/right-arrow.svg"
+                    alt="Next"
+                    className="mlt-list-arrow"
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </section>
+    </div>
   );
 };
 

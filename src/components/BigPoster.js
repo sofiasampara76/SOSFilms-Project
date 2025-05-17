@@ -13,9 +13,10 @@ const BigPoster = ({ trailerUrl }) => {
           className="react-player"
           url={trailerUrl}
           playing={playing}
+          muted={muted}
           controls={false}
-          width={'100%'}
-          height={'100%'}
+          width={"100%"}
+          height={"100%"}
           config={{
             youtube: {
               playerVars: {
