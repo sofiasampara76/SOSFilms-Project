@@ -1,0 +1,74 @@
+.film-section,
+.show-section {
+  width:95%;
+  margin-bottom: 2rem;
+}
+
+.film-grid {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.film-title,
+.show-title {
+font-weight: 400;
+text-align: center;
+margin-bottom: 1rem;
+font-family: 'Madimi One', sans-serif;
+font-size: 1.5rem;
+}
+
+.show-item {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+}
+
+.show-item-film {
+flex-direction: column;
+}
+
+.film-poster {
+    width: 10rem;
+    height: 15rem;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+    margin-bottom: 0.5rem;
+}
+
+.film-poster:hover {
+transform: scale(1.03);
+}
+
+.text-sm {
+    font-family: 'Madimi One', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.arrow-down-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.arrow-down-icon {
+    width: 24px;
+    height: 24px;
+    opacity: 0.7;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.arrow-down-icon:hover {
+transform: translateX(2px);
+opacity: 1;
+}
