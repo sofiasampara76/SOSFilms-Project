@@ -174,7 +174,6 @@ const MainPage = () => {
                       );
 
                       if (isMatch) {
-                        alert("Login successful!");
                         localStorage.setItem("user", JSON.stringify(user));
                         setShowModal(false);
                       } else {
@@ -211,6 +210,7 @@ const MainPage = () => {
                   className="register-form"
                   onSubmit={async (e) => {
                     e.preventDefault();
+                    const name = e.target.name.value;
                     const email = e.target.email.value;
                     const password = e.target.password.value;
                     const confirmPassword = e.target.confirmPassword.value;
@@ -224,18 +224,29 @@ const MainPage = () => {
                       const bcrypt = await import("bcryptjs");
                       const hashedPassword = await bcrypt.hash(password, 10);
 
-                      await fetch("http://localhost:3005/users", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json",
+                      const response = await fetch(
+                        "http://localhost:3005/users",
+                        {
+                          method: "POST",
+                          headers: {
+                            "Content-Type": "application/json",
+                          },
+                          body: JSON.stringify({
+                            email,
+                            password: hashedPassword,
+                          }),
                         },
-                        body: JSON.stringify({
-                          email,
-                          password: hashedPassword,
-                        }),
-                      });
+                      );
 
-                      alert("Registration successful!");
+                      if (!response.ok) {
+                        throw new Error("Failed to register user");
+                      }
+
+                      localStorage.setItem(
+                        "user",
+                        JSON.stringify({ name, email }),
+                      );
+
                       e.target.reset();
                       setShowModal(false);
                     } catch (err) {
