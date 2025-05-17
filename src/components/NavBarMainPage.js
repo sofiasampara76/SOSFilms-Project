@@ -3,7 +3,7 @@ import "../styles/NavBar.css";
 import { Link } from "react-router-dom";
 
 const NavBarMainPage = ({ onSelectType }) => {
-  const [selected, setSelected] = useState("shows");
+  const [selected, setSelected] = useState("series");
 
   const handleSelect = (type) => {
     setSelected(type);
@@ -52,21 +52,14 @@ const NavBarMainPage = ({ onSelectType }) => {
         >
           <img src="/profile-icon.svg" alt="Profile Icon"></img>
         </div>
-
-        <div
-          className="profile-icon-container"
-          onClick={() => alert("Profile clicked")}
-        >
-          <img src="/profile-icon.svg" alt="Profile Icon"></img>
-        </div>
       </div>
       <div className="series-films-slider">
         <div
           className={`slider-indicator ${
-            selected === "shows" ? "left" : "right"
+            selected === "series" ? "left" : "right"
           }`}
         />
-        <div className="series-container" onClick={() => handleSelect("shows")}>
+        <div className="series-container" onClick={() => handleSelect("series")}>
           <p>series</p>
         </div>
         <div className="films-container" onClick={() => handleSelect("films")}>

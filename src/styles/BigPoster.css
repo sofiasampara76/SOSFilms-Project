@@ -17,15 +17,82 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+/* .controls {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 1rem;
+} */
+
+/* .popular-now-right {
+  top: 0;
+  position: relative;
+  aspect-ratio: 16/9;
+  right: 0;
+} */
+
+.main-video {
+  position: relative;
+  width: 120%;
+  height: 120%;
+  right: 0;
+}
+
+.no-trailer {
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+/* .player-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 120%;
+  height: 120%;
+  overflow: hidden;
+  right: 0;
+  height: auto;
+} */
+
+/* .react-player {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  width: 100% !important;
+  height: 300% !important;
+} */
+
+
+.popular-now-right {
+  position: relative;
+  width: 75%;       /* або 100% — за потреби */
+  aspect-ratio: 16/9; /* встановлює висоту автоматично */
+  background: black;
+}
+
+.player-wrapper {
+  position: absolute;
+  inset: 0;          /* скорочення для top:0; left:0; right:0; bottom:0 */
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+.react-player {
+  position: absolute !important;
+  inset: 0 !important; /* video займе весь wrapper */
+    width: 100%;
+  height: 100%;
+}
+
 .controls {
   position: absolute;
   bottom: 1rem;
   right: 1rem;
   display: flex;
   gap: 1rem;
-}
-
-.popular-now-right {
-  width: 75%;
-  position: relative;
 }

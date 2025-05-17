@@ -1,108 +1,135 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/MainSlider.css";
 import "../styles/NavBar.css";
 import Slider from "./Slider";
 import PosterCard from "./PosterCard";
 import FilterForm from "./FilterForm";
 import { Link } from "react-router-dom";
+import { fetchAllMoviesAllPages } from "../api/tmdbService";
+import { fetchAllTVShowsAllPages } from "../api/tmdbService";
 
-let films = [
-  {
-    status: "to be determined",
-    officialPage: "https://ab3.army/",
-    releaseDate: "April 4",
-    rating: 4.5,
-    duration: "1h 41m",
-    description:
-      "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-    languages: ["Ukrainian", "English", "Switzerland"],
-    title: "Rick & Morty",
-    poster: "/rick-and-morty.jpg",
-    genres: ["comedy", "horror"],
-  },
-  {
-    status: "to be determined",
-    officialPage: "https://ab3.army/",
-    releaseDate: "April 4",
-    rating: 4.5,
-    duration: "1h 41m",
-    description:
-      "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-    languages: ["Ukrainian", "English", "Switzerland"],
-    title: "3 body problem",
-    poster: "/3-body-problem.jpg",
-    genres: ["comedy", "horror", "sien-fiction", "love"],
-  },
-  {
-    status: "to be determined",
-    officialPage: "https://ab3.army/",
-    releaseDate: "April 4",
-    rating: 4.5,
-    duration: "1h 41m",
-    description:
-      "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-    languages: ["Ukrainian", "English", "Switzerland"],
-    title: "The white lotus",
-    poster: "/white-lotus.jpg",
-    genres: ["comedy", "horror"],
-  },
-  {
-    status: "to be determined",
-    officialPage: "https://ab3.army/",
-    releaseDate: "April 4",
-    rating: 4.5,
-    duration: "1h 41m",
-    description:
-      "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-    languages: ["Ukrainian", "English", "Switzerland"],
-    title: "Rick & Morty",
-    poster: "/rick-and-morty.jpg",
-    genres: ["comedy", "horror"],
-  },
-  {
-    status: "to be determined",
-    officialPage: "https://ab3.army/",
-    releaseDate: "April 4",
-    rating: 4.5,
-    duration: "1h 41m",
-    description:
-      "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-    languages: ["Ukrainian", "English", "Switzerland"],
-    title: "Rick & Morty",
-    poster: "/rick-and-morty.jpg",
-    genres: ["comedy", "horror"],
-  },
-];
+// let films = [
+//   {
+//     status: "to be determined",
+//     officialPage: "https://ab3.army/",
+//     releaseDate: "April 4",
+//     rating: 4.5,
+//     duration: "1h 41m",
+//     description:
+//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
+//     languages: ["Ukrainian", "English", "Switzerland"],
+//     title: "Rick & Morty",
+//     poster: "/rick-and-morty.jpg",
+//     genres: ["comedy", "horror"],
+//   },
+//   {
+//     status: "to be determined",
+//     officialPage: "https://ab3.army/",
+//     releaseDate: "April 4",
+//     rating: 4.5,
+//     duration: "1h 41m",
+//     description:
+//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
+//     languages: ["Ukrainian", "English", "Switzerland"],
+//     title: "3 body problem",
+//     poster: "/3-body-problem.jpg",
+//     genres: ["comedy", "horror", "sien-fiction", "love"],
+//   },
+//   {
+//     status: "to be determined",
+//     officialPage: "https://ab3.army/",
+//     releaseDate: "April 4",
+//     rating: 4.5,
+//     duration: "1h 41m",
+//     description:
+//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
+//     languages: ["Ukrainian", "English", "Switzerland"],
+//     title: "The white lotus",
+//     poster: "/white-lotus.jpg",
+//     genres: ["comedy", "horror"],
+//   },
+//   {
+//     status: "to be determined",
+//     officialPage: "https://ab3.army/",
+//     releaseDate: "April 4",
+//     rating: 4.5,
+//     duration: "1h 41m",
+//     description:
+//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
+//     languages: ["Ukrainian", "English", "Switzerland"],
+//     title: "Rick & Morty",
+//     poster: "/rick-and-morty.jpg",
+//     genres: ["comedy", "horror"],
+//   },
+//   {
+//     status: "to be determined",
+//     officialPage: "https://ab3.army/",
+//     releaseDate: "April 4",
+//     rating: 4.5,
+//     duration: "1h 41m",
+//     description:
+//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
+//     languages: ["Ukrainian", "English", "Switzerland"],
+//     title: "Rick & Morty",
+//     poster: "/rick-and-morty.jpg",
+//     genres: ["comedy", "horror"],
+//   },
+// ];
 
 const MainSlider = ({ backgroundUrl, onSelectType }) => {
-  const [selected, setSelected] = useState("shows");
+  const [selected, setSelected] = useState("films");
+  const [centerIndex, setCenterIndex] = useState(1);
+  const [filtersOpen, setfiltersOpen] = useState(false);
+
+  const [films, setFilms] = useState([]);
+  const [shows, setShows] = useState([]);
+
+  useEffect(() => {
+    fetchAllMoviesAllPages()
+      .then(data => setFilms(data))
+      .catch(err => {
+        console.error("Error fetching all movies:", err);
+        setFilms([]);
+      });
+    fetchAllTVShowsAllPages()
+      .then(data => setShows(data))
+      .catch(err => {
+        console.error("Error fetching all shows:", err);
+        setShows([]);
+      });
+  }, []);
 
   const handleSelect = (type) => {
     setSelected(type);
+    setCenterIndex(0); 
     onSelectType(type);
   };
 
-  const [centerIndex, setCenterIndex] = useState(1);
+  const items = selected === "films" ? films : shows;
+  const length = items.length;
 
   const prev = () => {
-    setCenterIndex((centerIndex - 1 + films.length) % films.length);
+    if (length === 0) return;
+    setCenterIndex((ci) => (ci - 1 + length) % length);
   };
 
   const next = () => {
-    setCenterIndex((centerIndex + 1) % films.length);
+    if (length === 0) return;
+    setCenterIndex((ci) => (ci + 1) % length);
   };
 
   const getClassName = (index) => {
     if (index === centerIndex) return "film center";
-    if (index === (centerIndex - 1 + films.length) % films.length)
-      return "film left";
-    if (index === (centerIndex + 1) % films.length) return "film right";
+    if (index === (centerIndex - 1 + length) % length) return "film left";
+    if (index === (centerIndex + 1) % length) return "film right";
     return "film hidden";
   };
 
-  const backgroundUrlk = films[centerIndex].poster;
+  if (length === 0) {
+    return <div>Loading {selected}…</div>;
+  }
 
-  const [filtersOpen, setfiltersOpen] = useState(false);
+  const backgroundUrlk = items[centerIndex].poster;
 
   return (
     <section className="films-slider-container">
@@ -112,7 +139,7 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
         style={{ backgroundImage: `url(${backgroundUrlk})` }}
       />
       <div className="navbar-slider">
-        <FilterForm filtersOpen={filtersOpen} />
+        <FilterForm filtersOpen={filtersOpen} setFiltersOpen={setfiltersOpen}/>
         <div
           className="navbar-item"
           onClick={() => setfiltersOpen(!filtersOpen)}
@@ -144,13 +171,12 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
           </div>
         </div>
       </div>
-      {/* <Slider /> */}
       <div className="cards-slider">
         <button className="arrow left-arrow" onClick={prev}>
           <img src="left-arrow.svg" alt="Left Arrow"></img>
         </button>
         <div className="films">
-          {films.map((film, index) => (
+          {items.map((film, index) => (
             <PosterCard
               key={index}
               filmInfo={film}

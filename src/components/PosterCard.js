@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import "../styles/PosterCard.css";
 import { Link } from "react-router-dom";
 
-let genres = ["comedy", "adventure", "action"];
+// let genres = ["comedy", "adventure", "action"];
 
 const PosterCard = ({ filmInfo, isCenter, className }) => {
   const [liked, setLiked] = useState(false);
@@ -59,7 +59,7 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
           style={{ textDecoration: "none", color: "inherit" }}
           state={{ filmInfo }}
         >
-          <p className="film-title">{filmInfo.title}</p>
+          <p className="film-title">{filmInfo.title ?? filmInfo.name}</p>
         </Link>
         <img
           className="heart-button"

@@ -6,11 +6,12 @@
   color: white;
   overflow: hidden;
   padding-top: 3%;
-  height: 120vh;
+  padding-bottom: 3%;
+  /* height: 100vh; */
 }
 
 .cards-slider {
-  margin-top: 10%;
+  margin-top: 2%;
   position: relative;
   z-index: 1;
   display: flex;
@@ -83,6 +84,7 @@
   justify-content: space-around;
   width: 80%;
   height: 80vh;
+  margin-top: 3%;
 }
 
 .film.center .genres {

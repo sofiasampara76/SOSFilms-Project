@@ -13,12 +13,13 @@ body {
     align-items: flex-start;
     /* margin-left: 20px; */
     left: 2%;
+    top: 3%;
 }
 
 .popular-now-container {
     color: white;
     overflow: hidden;
-    padding-top: 3%;
+    /* padding-top: 3%; */
     /* height: 100vh; */
 
     position: relative;
@@ -26,8 +27,8 @@ body {
     /* height: 90vh; */
     color: white;
     overflow: hidden;
-    padding-top: 5%;
-    height: 130vh;
+    /* padding-top: 5%; */
+    /* height: 100vh; */
 }
 
 .most-popular-text {
@@ -52,8 +53,8 @@ body {
 }
 
 .arrow-down {
-    position: absolute; /* or fixed, depending on layout */
-    left: 50%; /* anchor to the center */
+    position: absolute;
+    left: 50%;
     transform: translateX(-50%);
 
     animation: bounce 2s infinite;
@@ -84,7 +85,9 @@ body {
 
 .popular-now-content {
     position: relative;
-    padding: 0px;
+    /* padding: 0px; */
+    height: auto;
+    top: 0;
 }
 
 @keyframes bounce {
