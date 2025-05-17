@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import '../styles/UserProfile.css';
+import '../styles/Favourites.css';
 
 export function RenderFilms({ favoriteFilms }) {
   const [startIndex, setStartIndex] = useState(0);
@@ -21,8 +21,8 @@ export function RenderFilms({ favoriteFilms }) {
           <li key={idx} className="show-item show-item-film">
             <img src={film.image} alt={film.title} className="film-poster" />
             <p className="text-sm">{film.title}</p>
-            <div className="remove-box">
-              <img src="/unlike.svg" alt="Remove" className="remove-heart" />
+            <div>
+              <img src="/unlike.svg" alt="Remove"/>
             </div>
           </li>
         ))}
@@ -42,7 +42,7 @@ export function RenderShows({ favoriteShows }) {
   const handleNext = () => {
     const nextStart = startIndex + 1;
     if (nextStart >= favoriteShows.length) {
-      setStartIndex(0); // loop back to top
+      setStartIndex(0);
     } else {
       setStartIndex(nextStart);
     }
@@ -69,8 +69,8 @@ export function RenderShows({ favoriteShows }) {
                 </span>
               </div>
             </div>
-            <div className="remove-box">
-              <img src="/unlike.svg" alt="Remove" className="remove-heart" />
+            <div>
+              <img src="/unlike.svg" alt="Remove"/>
             </div>
           </li>
         ))}
@@ -108,7 +108,7 @@ export const FilmSection = () => {
           <div className="left-favorite-section">
             <div className="orientation">
               <img
-                src="/images.svg"
+                src="/list1.svg"
                 alt="Card View"
                 onClick={() => setIsCardView1(true)}
                 className={isCardView1 ? 'active-icon' : ''}
@@ -131,7 +131,7 @@ export const FilmSection = () => {
           <div className="left-favorite-section">
             <div className="orientation">
               <img
-                src="/images.svg"
+                src="/list1.svg"
                 alt="Card View"
                 onClick={() => setIsCardView2(true)}
                 className={isCardView2 ? 'active-icon' : ''}
