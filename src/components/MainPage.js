@@ -193,6 +193,7 @@ const MainPage = () => {
                   className="register-form"
                   onSubmit={async (e) => {
                     e.preventDefault();
+                    const name = e.target.name.value;
                     const email = e.target.email.value;
                     const password = e.target.password.value;
                     const confirmPassword = e.target.confirmPassword.value;
@@ -206,15 +207,21 @@ const MainPage = () => {
                       const bcrypt = await import('bcryptjs');
                       const hashedPassword = await bcrypt.hash(password, 10);
 
-                      await fetch("http://localhost:3005/users", {
+                      const response = await fetch("http://localhost:3005/users", {
                         method: "POST",
                         headers: {
                           "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ email, password: hashedPassword })
+                        body: JSON.stringify({ name, email, password: hashedPassword })
                       });
 
+                      if (!response.ok) {
+                        throw new Error("Failed to register user");
+                      }
+
                       alert("Registration successful!");
+                      localStorage.setItem("user", JSON.stringify({ name, email }));
+
                       e.target.reset();
                       setShowModal(false);
                     } catch (err) {
@@ -223,13 +230,13 @@ const MainPage = () => {
                     }
                   }}
                 >
+                  <input type="text" name="name" placeholder="Name" required />
                   <input type="email" name="email" placeholder="Email" required />
                   <input type="password" name="password" placeholder="Password" required />
                   <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
                   <button type="submit">Register</button>
                   <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
                 </form>
-
               </>
             )}
           </div>
