@@ -163,6 +163,7 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
                 filmInfo={film}
                 isCenter={idx === centerIndex}
                 className={getClassName(idx)}
+                filmType={selected}
               />
             ))}
           </div>
