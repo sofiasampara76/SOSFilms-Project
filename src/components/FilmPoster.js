@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FavouriteButton } from "./FavouriteButton";
 
-const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId }) => {
+const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId, filmRating }) => {
   return (
     <motion.div
       className="popular-now-left"
@@ -21,7 +21,7 @@ const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId }) => {
           <h2 className="title">{filmTitle}</h2>
           <p className="subtitle">{filmType}</p>
         </div>
-        <FavouriteButton item={{ title: filmTitle, posterUrl: posterUrl }} type={filmType} />
+        <FavouriteButton item={{ id: filmId, title: filmTitle, posterUrl: posterUrl, rating: filmRating }} type={filmType} />
       </div>
     </motion.div>
   );
