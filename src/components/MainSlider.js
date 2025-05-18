@@ -49,7 +49,7 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
   };
 
   useEffect(() => {
-    setCenterIndex(0);
+    setCenterIndex(1);
   }, [selected, selectedGenres]);
 
   const handleSelect = (type) => {
