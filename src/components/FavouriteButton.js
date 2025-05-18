@@ -6,7 +6,7 @@ export const FavouriteButton = ({ item, type }) => {
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const list = type === "shows" ? user.favouriteSeries : user.favouriteFilms;
+    const list = type === "films" ? user.favouriteFilms : user.favouriteSeries;
     setIsLiked(list?.some((f) => f.id === item.id));
   }, [item.id, type]);
 
