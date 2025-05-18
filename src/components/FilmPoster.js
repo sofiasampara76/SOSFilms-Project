@@ -2,8 +2,9 @@ import React from "react";
 import "../styles/PosterFilm.css";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { FavouriteButton } from "./FavouriteButton";
 
-const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId }) => {
+const FilmPoster = ({ posterUrl, filmTitle, filmType }) => {
   return (
     <motion.div
       className="popular-now-left"
@@ -12,7 +13,7 @@ const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId }) => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Link to={`/review/${filmId}`}>
+      <Link to="/review">
         <img src={posterUrl} alt="poster" className="poster-img" />
       </Link>
       <div className="poster-text-container">
@@ -20,9 +21,7 @@ const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId }) => {
           <h2 className="title">{filmTitle}</h2>
           <p className="subtitle">{filmType}</p>
         </div>
-        <button className="heart-btn">
-          <img src="/heart-btn.svg" alt="Favourite button"></img>
-        </button>
+        <FavouriteButton item={{ title: filmTitle, posterUrl: posterUrl }} type={filmType} />
       </div>
     </motion.div>
   );

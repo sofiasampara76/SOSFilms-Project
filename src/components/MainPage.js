@@ -14,7 +14,7 @@ const MainPage = () => {
   const [popular, setPopular] = useState(null);
   const [popularShow, setPopularShow] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [authMode, setAuthMode] = useState("login");
+  const [authMode, setAuthMode] = useState("login")
 
   useEffect(() => {
     fetchMostPopularMovie()
@@ -83,9 +83,9 @@ const MainPage = () => {
     <>
       <section className="popular-now-container">
         <img className="logo-image" src="/SOSFilms.svg" alt="Logo"></img>
-
+        
         <button className="login-btn" onClick={handleOpenModal}>
-          Log In / Register
+            Log In / Register
         </button>
 
         <div
@@ -106,7 +106,6 @@ const MainPage = () => {
               posterUrl={popularShow.poster}
               filmTitle={popularShow.title.toUpperCase()}
               filmType={"series"}
-              filmId={popularShow.id}
             />
             <BigPoster trailerUrl={trailerShowUrl} />
           </div>
@@ -116,7 +115,6 @@ const MainPage = () => {
               posterUrl={popular.poster}
               filmTitle={popular.title.toUpperCase()}
               filmType={"film"}
-              filmId={popular.id}
             />
             <BigPoster trailerUrl={trailerUrl} />
           </div>
@@ -156,9 +154,7 @@ const MainPage = () => {
                     const password = e.target.password.value;
 
                     try {
-                      const response = await fetch(
-                        `http://localhost:3005/users?email=${email}`,
-                      );
+                      const response = await fetch(`http://localhost:3005/users?email=${email}`);
                       const users = await response.json();
 
                       if (users.length === 0) {
@@ -167,11 +163,8 @@ const MainPage = () => {
                       }
 
                       const user = users[0];
-                      const bcrypt = await import("bcryptjs");
-                      const isMatch = await bcrypt.compare(
-                        password,
-                        user.password,
-                      );
+                      const bcrypt = await import('bcryptjs');
+                      const isMatch = await bcrypt.compare(password, user.password);
 
                       if (isMatch) {
                         localStorage.setItem("user", JSON.stringify(user));
@@ -185,23 +178,12 @@ const MainPage = () => {
                     }
                   }}
                 >
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-                  />
+                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="password" name="password" placeholder="Password" required />
                   <button type="submit">Log In</button>
-                  <p className="close-modal" onClick={handleCloseModal}>
-                    Cancel
-                  </p>
+                  <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
                 </form>
+
               </>
             ) : (
               <>
@@ -221,31 +203,28 @@ const MainPage = () => {
                     }
 
                     try {
-                      const bcrypt = await import("bcryptjs");
+                      const bcrypt = await import('bcryptjs');
                       const hashedPassword = await bcrypt.hash(password, 10);
 
-                      const response = await fetch(
-                        "http://localhost:3005/users",
-                        {
-                          method: "POST",
-                          headers: {
-                            "Content-Type": "application/json",
-                          },
-                          body: JSON.stringify({
-                            email,
-                            password: hashedPassword,
-                          }),
+                      const response = await fetch("http://localhost:3005/users", {
+                        method: "POST",
+                        headers: {
+                          "Content-Type": "application/json"
                         },
-                      );
+                        body: JSON.stringify({
+                          name,
+                          email,
+                          password: hashedPassword,
+                          favouriteFilms: [],
+                          favouriteSeries: []
+                        })
+                      });
 
                       if (!response.ok) {
                         throw new Error("Failed to register user");
                       }
 
-                      localStorage.setItem(
-                        "user",
-                        JSON.stringify({ name, email }),
-                      );
+                      localStorage.setItem("user", JSON.stringify({ name, email }));
 
                       e.target.reset();
                       setShowModal(false);
@@ -255,28 +234,12 @@ const MainPage = () => {
                     }
                   }}
                 >
-                  <input
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    required
-                  />
-                  <input
-                    type="password"
-                    name="password"
-                    placeholder="Password"
-                    required
-                  />
-                  <input
-                    type="password"
-                    name="confirmPassword"
-                    placeholder="Confirm Password"
-                    required
-                  />
+                  <input type="text" name="name" placeholder="Name" required />
+                  <input type="email" name="email" placeholder="Email" required />
+                  <input type="password" name="password" placeholder="Password" required />
+                  <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
                   <button type="submit">Register</button>
-                  <p className="close-modal" onClick={handleCloseModal}>
-                    Cancel
-                  </p>
+                  <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
                 </form>
               </>
             )}

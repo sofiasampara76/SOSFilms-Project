@@ -1,32 +1,64 @@
 import React, { useState } from 'react';
 import '../styles/Favourites.css';
+import { toggleFavourite } from "./UserService";
 
-export function RenderFilms({ favoriteFilms }) {
+export function RenderFilms({ favoriteFilms, type }) {
   const [startIndex, setStartIndex] = useState(0);
-  const handleNext = () => {
-    const nextStart = (startIndex + 1) % favoriteFilms.length;
-    setStartIndex(nextStart);
-  };
 
   const visibleFilms = [
     favoriteFilms[startIndex],
     favoriteFilms[(startIndex + 1) % favoriteFilms.length],
   ];
-  
+
+  // Create a separate liked state for each visible film
+  const getInitialLiked = (film) => {
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    const likedList =
+      type === "film" ? user.favouriteFilms || [] : user.favouriteSeries || [];
+    return likedList.some((item) => item.id === film.id);
+  };
+
+  const [likedStates, setLikedStates] = useState(() =>
+    visibleFilms.map((film) => getInitialLiked(film))
+  );
+
+  const handleToggle = async (film, index) => {
+    await toggleFavourite(film, type);
+
+    const updatedStates = [...likedStates];
+    updatedStates[index] = !updatedStates[index];
+    setLikedStates(updatedStates);
+  };
+
+  const handleNext = () => {
+    const nextStart = (startIndex + 1) % favoriteFilms.length;
+    setStartIndex(nextStart);
+    // Recompute liked states for the new visible pair
+    const newVisible = [
+      favoriteFilms[nextStart],
+      favoriteFilms[(nextStart + 1) % favoriteFilms.length],
+    ];
+    setLikedStates(newVisible.map((film) => getInitialLiked(film)));
+  };
 
   return (
     <div className="film-section">
       <ul className="film-grid">
         {visibleFilms.map((film, idx) => (
-          <li key={idx} className="show-item show-item-film">
+          <li key={film.id || idx} className="show-item show-item-film">
             <img src={film.image} alt={film.title} className="film-poster" />
             <p className="text-sm">{film.title}</p>
             <div>
-              <img src="/unlike.svg" alt="Remove"/>
+              <img
+                src={likedStates[idx] ? "/heart-btn.svg" : "/heart-btn-filled.svg"}
+                alt="Toggle like"
+                className="remove-heart"
+                onClick={() => handleToggle(film, idx)}
+              />
             </div>
           </li>
         ))}
-        
+
         <div className="arrow-down-container" onClick={handleNext}>
           <img src="/arrow_right.png" alt="Next" className="arrow-down-icon" />
         </div>
@@ -70,7 +102,7 @@ export function RenderShows({ favoriteShows }) {
               </div>
             </div>
             <div>
-              <img src="/unlike.svg" alt="Remove"/>
+              <img src="/heart-btn.svg" alt="Remove"/>
             </div>
           </li>
         ))}
@@ -122,9 +154,13 @@ export const FilmSection = () => {
             </div>
 
             <div className="film-section">
-              <h3 className="favorite-title">films</h3>
-              {isCardView1 ? <RenderFilms favoriteFilms={favoriteFilms} /> : <RenderShows favoriteShows={favoriteFilms} />}
-              {/* {isCardView1 ? <RenderFilms favoriteFilms={favoriteFilms} /> : RenderShows(favoriteShows)} */}
+            <h3 className="favorite-title">films</h3>
+                {isCardView1 ? (
+                <RenderFilms favoriteFilms={favoriteFilms} type="film" />
+                ) : (
+                <RenderShows favoriteShows={favoriteFilms} />
+                )}
+
             </div>
           </div>
 
@@ -145,8 +181,12 @@ export const FilmSection = () => {
             </div>
 
             <div className="film-section">
-              <h3 className="favorite-title">shows</h3>
-              {isCardView2 ? <RenderFilms favoriteFilms={favoriteShows} /> : <RenderShows favoriteShows={favoriteShows} />}
+            <h3 className="favorite-title">series</h3>
+            {isCardView2 ? (
+            <RenderFilms favoriteFilms={favoriteShows} type="series" />
+            ) : (
+            <RenderShows favoriteShows={favoriteShows} />
+            )}
             </div>
           </div>
 
