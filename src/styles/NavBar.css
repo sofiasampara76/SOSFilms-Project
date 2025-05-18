@@ -11,6 +11,7 @@ body {
 }
 
 .navbar-biggest-container {
+  margin-top: 8vh;
   position: relative;
   width: 44%;
   align-self: center;
@@ -79,14 +80,20 @@ body {
   display: flex;
   flex-direction: column;
   top: 100%;
-  left: 0;
+  /* left: 0; */
   right: 0;
   background: rgba(255, 255, 255, 0.5);
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   border-top: none;
-  max-height: 200px;
+  max-height: 40vh;
+  width: 60%;
   overflow-y: auto;
   z-index: 20;
+  border-radius: 12px;
+}
+
+.search-dropdown::-webkit-scrollbar {
+  display: none;
 }
 
 .search-item {

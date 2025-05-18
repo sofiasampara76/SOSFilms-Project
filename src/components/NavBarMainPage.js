@@ -2,8 +2,9 @@ import { React, useState, useMemo, useEffect, useCallback } from "react";
 import "../styles/NavBar.css";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { searchMovies } from "../api/tmdbService";
+import { searchMovies, searchShows } from "../api/tmdbService";
 import debounce from "lodash.debounce";
+import SearchedCard from "./SearchedCard"
 
 const NavBarMainPage = ({ onSelectType, selected }) => {
   // const [selected, setSelected] = useState("shows");
@@ -15,32 +16,34 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
 
   // const navigate = useNavigate();
 
-  const doSearch = useMemo(() => debounce(async (term, p=1) => {
-    if (!term.trim()) return;
-    try {
-      const { results, total_pages } = await searchMovies(term, p);
-      setTotalPages(total_pages);
-      setPage(p);
-      setSearchResults(prev => p === 1 ? results : [...prev, ...results]);
-    } catch (e) {
-      console.error(e);
-    }
-  }, 300), []);
+ const doSearch = useMemo(
+    () =>
+      debounce(async (term, p = 1) => {
+        if (!term.trim()) return setSearchResults([]);
+        try {
+          const data =
+            selected === "films"
+              ? await searchMovies(term, p)
+              : await searchShows(term, p);
 
-  // const debouncedSearch = useMemo(
-  //   () =>
-  //     debounce(async (term) => {
-  //       if (!term.trim()) return setSearchResults([]);
-  //       try {
-  //         const { results } = await searchMovies(term, 1);
-  //         setSearchResults(results.slice(0, 5));
-  //       } catch (e) {
-  //         console.error(e);
-  //         setSearchResults([]);
-  //       }
-  //     }, 300),
-  //   []
-  // );
+          const typedResults = data.results.map((item) => ({
+            ...item,
+            type: selected === "films" ? "films" : "shows",
+          }));
+
+          setTotalPages(data.total_pages);
+          setPage(p);
+          setSearchResults((prev) =>
+            p === 1 ? typedResults : [...prev, ...typedResults]
+          );
+        } catch (e) {
+          console.error(e);
+          setSearchResults([]);
+        }
+      }, 300),
+    [selected]
+  );
+
 
     useEffect(() => {
     if (!searchTerm) {
@@ -50,12 +53,6 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
     doSearch(searchTerm, 1);
     return () => doSearch.cancel();
   }, [searchTerm, doSearch]);
-
-  // useEffect(() => {
-  //   debouncedSearch(searchTerm);
-  //   // очистка при unmount або перед новим викликом
-  //   return () => debouncedSearch.cancel();
-  // }, [searchTerm, debouncedSearch]);
 
   const handleScroll = useCallback(e => {
     const { scrollTop, clientHeight, scrollHeight } = e.target;
@@ -71,13 +68,6 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
   };
   return (
     <>
-      <img
-        className="filter-icon"
-        src="/filter-icon.svg"
-        alt="Filter icon"
-      ></img>
-      <p className="navbar-text">Filter</p>
-
       <div className="navbar-biggest-container">
         <div className="navbar-container">
           <div className="navbar-item" onClick={() => alert("Filter clicked")}>
@@ -109,17 +99,7 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
                 <ul className="search-dropdown" onScroll={handleScroll}>
                   
                   {searchResults.map((m) => (
-                    <span
-                      key={m.id}
-                      className="search-item"
-                      onClick={() => {
-                        // navigate(`/movie/${m.id}`);
-                        setSearchTerm("");
-                        setSearchResults([]);
-                      }}
-                    >
-                      {m.title}
-                    </span>
+                    <SearchedCard filmId={m.id} type={m.type} />
                   ))}
                 </ul>
               )}

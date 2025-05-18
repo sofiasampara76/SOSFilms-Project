@@ -1,0 +1,48 @@
+.film-info-container {
+    position: relative;
+    height: 15vh;
+    margin: 5px;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+}
+
+.film-info-poster {
+    position: relative;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.film-info-c {
+    padding: 10px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    /* padding: 5px; */
+    justify-content: space-between;
+    /* gap: 10px;  */
+    font-size: 16px;
+}
+
+.metadata {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+}
+
+.film-info-title {
+    /* margin-bottom: auto; */
+    position: relative;
+}
+
+.film-info-year {
+    position: relative;
+}
+
+.film-info-rating {
+    position: relative;
+}
+
+.film-info-genres {
+    position: relative;
+}
