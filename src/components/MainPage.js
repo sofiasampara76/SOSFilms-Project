@@ -109,6 +109,7 @@ const MainPage = () => {
               filmTitle={popularShow.title.toUpperCase()}
               filmType={"shows"}
               filmId={popularShow.id}
+              filmRating = {popularShow.vote_average ?? popularShow.rating}
             />
             <BigPoster trailerUrl={trailerShowUrl} />
           </div>
@@ -119,6 +120,7 @@ const MainPage = () => {
               filmTitle={popular.title.toUpperCase()}
               filmType={"film"}
               filmId={popular.id}
+              filmRating = {popular.vote_average ?? popular.rating}
             />
             <BigPoster trailerUrl={trailerUrl} />
           </div>
