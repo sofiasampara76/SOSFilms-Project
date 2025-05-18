@@ -1,8 +1,9 @@
 import React, { useState, useRef } from "react";
 import "../styles/PosterCard.css";
 import { Link } from "react-router-dom";
+import { FavouriteButton } from "./FavouriteButton";
 
-const PosterCard = ({ filmInfo, isCenter, className }) => {
+const PosterCard = ({ filmInfo, isCenter, className, filmType }) => {
   const [liked, setLiked] = useState(false);
 
   const toggleLike = () => {
@@ -54,12 +55,7 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
         >
           <p className="film-title">{filmInfo.title ?? filmInfo.name}</p>
         </Link>
-        <img
-          className="heart-button"
-          src={liked ? "/heart-btn-filled.svg" : "/heart-btn.svg"}
-          alt="Heart button"
-          onClick={toggleLike}
-        ></img>
+        <FavouriteButton item={ filmInfo } type={ filmType } />
       </div>
     </div>
   );
