@@ -7,14 +7,14 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import Review from "./components/Review";
-import UserProfile from "./components/UserProfile"
+import UserProfile from "./components/UserProfile";
 
 function App() {
   return (
     <Router>
       <Routes>
         <Route path="/" element={<MainPage />} />
-        <Route path="/review" element={<Review />} />
+        <Route path="/review/:id" element={<Review />} />
         <Route path="/profile" element={<UserProfile />} />
       </Routes>
     </Router>

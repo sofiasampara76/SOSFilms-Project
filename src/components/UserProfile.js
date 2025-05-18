@@ -5,10 +5,8 @@ import { FilmSection } from './Favourites';
 const UserProfile = () => {
   const backgroundUrl = "/ginny-and-georgia.png";
 
-  const user = {
-    name: 'Example Example',
-    email: 'example@gmail.com',
-  };
+  const storedUser = localStorage.getItem("user");
+  const user = storedUser ? JSON.parse(storedUser) : null;
 
   return (
     <div className="page-wrapper">
@@ -22,17 +20,26 @@ const UserProfile = () => {
       <div className="main-content">
         <div className="personal-section">
           <h2 className="favorite-title">personal information</h2>
-          <div className="info-card">
-            <div className="info-row">
-              <div className="icon-wrapper">
-                <img src="/person-icon.svg" alt="User Icon" className="person-icon" />
-              </div>
-              <div className="text-left">
-                <p className="font-bold">name: <span className='inside-font-bold'>{user.name}</span></p>
-                <p className="font-bold">mail: <span className='inside-font-bold'>{user.email}</span></p>
+          {user ? (
+            <div className="info-card">
+              <div className="info-row">
+                <div className="icon-wrapper">
+                  <img src="/person-icon.svg" alt="User Icon" className="person-icon" />
+                </div>
+                <div className="text-left">
+                  <p className="font-bold">
+                    name: <span className='inside-font-bold'>{user.name || "Anonymous"}</span>
+                  </p>
+                  <p className="font-bold">
+                    mail: <span className='inside-font-bold'>{user.email}</span>
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
+          ) : (
+            <p className="font-bold">Please log in to view profile.</p>
+          )}
+
         </div>
 
         <h2 className="favorite-title">favorite</h2>

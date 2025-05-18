@@ -20,7 +20,7 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
   };
   return (
     <div className={className}>
-      <Link to={"/review"} state={{ filmInfo }}>
+      <Link to={`/review/${filmInfo.id}`} state={{ filmInfo }}>
         <img
           className="poster-card-image"
           src={filmInfo.poster}
@@ -48,7 +48,7 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
       </div>
       <div className="film-info">
         <Link
-          to={"/review"}
+          to={`/review/${filmInfo.id}`}
           style={{ textDecoration: "none", color: "inherit" }}
           state={{ filmInfo }}
         >
