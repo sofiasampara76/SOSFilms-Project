@@ -7,7 +7,7 @@ const NavBarMainPage = ({ onSelectType }) => {
 
   const handleSelect = (type) => {
     setSelected(type);
-    onSelectType(type); // Notify parent to change view
+    onSelectType(type);
   };
   return (
     <>

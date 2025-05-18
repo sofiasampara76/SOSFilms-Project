@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "../styles/MainSlider.css";
 import "../styles/NavBar.css";
 import Slider from "./Slider";
@@ -8,105 +8,75 @@ import { Link } from "react-router-dom";
 import { fetchAllMoviesAllPages } from "../api/tmdbService";
 import { fetchAllTVShowsAllPages } from "../api/tmdbService";
 
-// let films = [
-//   {
-//     status: "to be determined",
-//     officialPage: "https://ab3.army/",
-//     releaseDate: "April 4",
-//     rating: 4.5,
-//     duration: "1h 41m",
-//     description:
-//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-//     languages: ["Ukrainian", "English", "Switzerland"],
-//     title: "Rick & Morty",
-//     poster: "/rick-and-morty.jpg",
-//     genres: ["comedy", "horror"],
-//   },
-//   {
-//     status: "to be determined",
-//     officialPage: "https://ab3.army/",
-//     releaseDate: "April 4",
-//     rating: 4.5,
-//     duration: "1h 41m",
-//     description:
-//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-//     languages: ["Ukrainian", "English", "Switzerland"],
-//     title: "3 body problem",
-//     poster: "/3-body-problem.jpg",
-//     genres: ["comedy", "horror", "sien-fiction", "love"],
-//   },
-//   {
-//     status: "to be determined",
-//     officialPage: "https://ab3.army/",
-//     releaseDate: "April 4",
-//     rating: 4.5,
-//     duration: "1h 41m",
-//     description:
-//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-//     languages: ["Ukrainian", "English", "Switzerland"],
-//     title: "The white lotus",
-//     poster: "/white-lotus.jpg",
-//     genres: ["comedy", "horror"],
-//   },
-//   {
-//     status: "to be determined",
-//     officialPage: "https://ab3.army/",
-//     releaseDate: "April 4",
-//     rating: 4.5,
-//     duration: "1h 41m",
-//     description:
-//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-//     languages: ["Ukrainian", "English", "Switzerland"],
-//     title: "Rick & Morty",
-//     poster: "/rick-and-morty.jpg",
-//     genres: ["comedy", "horror"],
-//   },
-//   {
-//     status: "to be determined",
-//     officialPage: "https://ab3.army/",
-//     releaseDate: "April 4",
-//     rating: 4.5,
-//     duration: "1h 41m",
-//     description:
-//       "Four misfits are pulled through a mysterious portal into a bizarre cubic world. To return home, they must master this strange dimension.",
-//     languages: ["Ukrainian", "English", "Switzerland"],
-//     title: "Rick & Morty",
-//     poster: "/rick-and-morty.jpg",
-//     genres: ["comedy", "horror"],
-//   },
-// ];
-
 const MainSlider = ({ backgroundUrl, onSelectType }) => {
   const [selected, setSelected] = useState("films");
   const [centerIndex, setCenterIndex] = useState(1);
   const [filtersOpen, setfiltersOpen] = useState(false);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const [films, setFilms] = useState([]);
   const [shows, setShows] = useState([]);
 
   useEffect(() => {
+    Promise.all([
+      fetchAllMoviesAllPages().then((d) => setFilms(d)),
+      fetchAllTVShowsAllPages().then((d) => setShows(d)),
+    ])
+      .catch(console.error)
+      .finally(() => setLoading(false));
+  }, []);
+
+  useEffect(() => {
     fetchAllMoviesAllPages()
-      .then(data => setFilms(data))
-      .catch(err => {
+      .then((data) => setFilms(data))
+      .catch((err) => {
         console.error("Error fetching all movies:", err);
         setFilms([]);
       });
     fetchAllTVShowsAllPages()
-      .then(data => setShows(data))
-      .catch(err => {
+      .then((data) => setShows(data))
+      .catch((err) => {
         console.error("Error fetching all shows:", err);
         setShows([]);
       });
   }, []);
 
+  const toggleGenre = (genre) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genre) ? prev.filter((g) => g !== genre) : [...prev, genre]
+    );
+  };
+
+  useEffect(() => {
+    setCenterIndex(0);
+  }, [selected, selectedGenres]);
+
   const handleSelect = (type) => {
     setSelected(type);
-    setCenterIndex(0); 
     onSelectType(type);
   };
 
   const items = selected === "films" ? films : shows;
-  const length = items.length;
+
+  const availableGenres = useMemo(() => {
+    const all = items.flatMap((item) =>
+      Array.isArray(item.genres) ? item.genres.map((g) => g.toLowerCase()) : []
+    );
+    return [...new Set(all)].sort();
+  }, [items]);
+
+  const filteredItems = useMemo(() => {
+    if (!selectedGenres.length) return items;
+    return items.filter((item) => {
+      const itemGenres = Array.isArray(item.genres)
+        ? item.genres.map((g) => g.toLowerCase())
+        : [];
+      return selectedGenres.every((g) => itemGenres.includes(g));
+    });
+  }, [items, selectedGenres]);
+
+  const length = filteredItems.length;
 
   const prev = () => {
     if (length === 0) return;
@@ -125,11 +95,11 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
     return "film hidden";
   };
 
-  if (length === 0) {
+  if (loading) {
     return <div>Loading {selected}…</div>;
   }
 
-  const backgroundUrlk = items[centerIndex].poster;
+  const backgroundUrlk = filteredItems[centerIndex]?.poster;
 
   return (
     <section className="films-slider-container">
@@ -139,7 +109,13 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
         style={{ backgroundImage: `url(${backgroundUrlk})` }}
       />
       <div className="navbar-slider">
-        <FilterForm filtersOpen={filtersOpen} setFiltersOpen={setfiltersOpen}/>
+        <FilterForm
+          filtersOpen={filtersOpen}
+          setFiltersOpen={setfiltersOpen}
+          selectedGenres={selectedGenres}
+          toggleGenre={toggleGenre}
+          allGenres={availableGenres}
+        />
         <div
           className="navbar-item"
           onClick={() => setfiltersOpen(!filtersOpen)}
@@ -172,23 +148,31 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
         </div>
       </div>
       <div className="cards-slider">
-        <button className="arrow left-arrow" onClick={prev}>
-          <img src="left-arrow.svg" alt="Left Arrow"></img>
-        </button>
-        <div className="films">
-          {items.map((film, index) => (
-            <PosterCard
-              key={index}
-              filmInfo={film}
-              isCenter={index === centerIndex}
-              className={getClassName(index)}
-            />
-          ))}
-        </div>
-        <button className="arrow right-arrow" onClick={next}>
-          <img src="right-arrow.svg" alt="Right Arrow"></img>
-        </button>
-      </div>
+      {filteredItems.length === 0 ? (
+        <p className="no-results">No {selected} match those filters.</p>
+      ) : (
+        <>
+          <button type="button" className="arrow left-arrow" onClick={prev}>
+            <img src="left-arrow.svg" alt="Left Arrow" />
+          </button>
+
+          <div className="films">
+            {filteredItems.map((film, idx) => (
+              <PosterCard
+                key={idx}
+                filmInfo={film}
+                isCenter={idx === centerIndex}
+                className={getClassName(idx)}
+              />
+            ))}
+          </div>
+
+          <button type="button" className="arrow right-arrow" onClick={next}>
+            <img src="right-arrow.svg" alt="Right Arrow" />
+          </button>
+        </>
+      )}
+    </div>
     </section>
   );
 };

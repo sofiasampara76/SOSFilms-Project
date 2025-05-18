@@ -17,6 +17,13 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
+.control-btn img {
+  width: 90%;
+  height: 90%;
+  object-fit: contain;
+  display: block;
+}
+
 /* .controls {
   position: absolute;
   bottom: 1rem;

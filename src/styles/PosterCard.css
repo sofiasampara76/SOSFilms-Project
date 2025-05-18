@@ -156,18 +156,25 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  z-index: 1;
+  z-index: 4;
 }
 
 .left-arrow {
   left: 10px;
-  width: 5%;
+  width: 3%;
   left: 33%;
 }
 
 .right-arrow {
   right: 10px;
-  width: 5%;
+  width: 3%;
   right: 33%;
+}
+
+.arrow img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
 }
 

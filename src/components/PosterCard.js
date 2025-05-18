@@ -2,8 +2,6 @@ import React, { useState, useRef } from "react";
 import "../styles/PosterCard.css";
 import { Link } from "react-router-dom";
 
-// let genres = ["comedy", "adventure", "action"];
-
 const PosterCard = ({ filmInfo, isCenter, className }) => {
   const [liked, setLiked] = useState(false);
 
@@ -30,15 +28,10 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
         ></img>
       </Link>
       <div className="genres-slider">
-        {/* {genres.map((genre) => (
-          <div className="genre-container">
-            <p>{genre}</p>
-          </div>
-        ))} */}
         {isCenter && (
           <div className="genres-wrapper">
             <button className="genre-arrow left" onClick={scrollLeft}>
-              &lt;
+              <img src="left-arrow.svg" alt="Left Arrow"></img>
             </button>
             <div className="genres scrollable" ref={genreRef}>
               {filmInfo.genres.map((g, i) => (
@@ -48,7 +41,7 @@ const PosterCard = ({ filmInfo, isCenter, className }) => {
               ))}
             </div>
             <button className="genre-arrow right" onClick={scrollRight}>
-              &gt;
+              <img src="right-arrow.svg" alt="Right Arrow"></img>
             </button>
           </div>
         )}
