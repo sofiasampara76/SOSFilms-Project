@@ -137,7 +137,7 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
             className="series-container"
             onClick={() => handleSelect("shows")}
           >
-            <p>series</p>
+            <p>shows</p>
           </div>
           <div
             className="films-container"

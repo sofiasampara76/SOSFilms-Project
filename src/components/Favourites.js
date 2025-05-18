@@ -181,9 +181,9 @@ export const FilmSection = () => {
             </div>
 
             <div className="film-section">
-            <h3 className="favorite-title">series</h3>
+            <h3 className="favorite-title">shows</h3>
             {isCardView2 ? (
-            <RenderFilms favoriteFilms={favoriteShows} type="series" />
+            <RenderFilms favoriteFilms={favoriteShows} type="shows" />
             ) : (
             <RenderShows favoriteShows={favoriteShows} />
             )}

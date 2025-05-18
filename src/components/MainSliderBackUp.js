@@ -92,7 +92,7 @@ const MainSlider = ({ onSelectType }) => {
             onClick={() => handleSelect("shows")}
             className="series-container"
           >
-            <p>series</p>
+            <p>shows</p>
           </div>
         </div>
       </div>

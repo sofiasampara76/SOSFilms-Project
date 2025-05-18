@@ -1,43 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Review.css";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { fetchMovieDetails } from "../api/tmdbService";
 
 const Review = () => {
-  const location = useLocation();
-  const filmInfo = location.state?.filmInfo;
+  const { id } = useParams();
 
-  // View toggles
-  const [filmsView, setFilmsView] = useState("card"); // "card" or "list"
-  const [showsView, setShowsView] = useState("list"); // "card" or "list"
+  // ALL HOOKS AT THE TOP:
+  const [film, setFilm] = useState(null);
 
-  const film = filmInfo || {
-    status: "to be determined",
-    officialPage: "#",
-    poster: "/minecraft.jpg",
-    releaseDate: "2025",
-    rating: "4",
-    duration: "1h 41m",
-    title: "MINECRAFT MOVIE",
-    description:
-      "Four misfits are suddenly pulled through a mysterious portal into a bizarre cubic wonderland that thrives on imagination. To get back home they'll have to master this world while embarking on a quest with an unexpected expert crafter.",
-    genres: ["comedy", "adventure", "action"],
-    languages: ["Ukrainian", "English", "Switzerland"],
-    trailers: ["/trailer1.jpg", "/trailer2.jpg", "/trailer3.jpg"],
-  };
+  function getDurationString(minutes) {
+    if (!minutes || isNaN(minutes)) return "";
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    if (h === 0) return `${m}m`;
+    if (m === 0) return `${h}h`;
+    return `${h}h ${m}m`;
+  }
 
-  // Example "more like this" data
-  const films = [
-    {
-      title: "HOW TO TRAIN YOUR DRAGON",
-      image: "/how-to-train.jpg",
-      rating: 4,
-    },
-    {
-      title: "MINECRAFT MOVIE",
-      image: "/minecraft.jpg",
-      rating: 4.5,
-    },
-  ];
+  const [filmsView, setFilmsView] = useState("card");
+  const [showsView, setShowsView] = useState("list");
+  const [showStart, setShowStart] = useState(0);
+  const [filmStart, setFilmStart] = useState(0);
 
   const shows = [
     { title: "RICK AND MORTY", rating: 4 },
@@ -47,8 +31,15 @@ const Review = () => {
     { title: "HAHA", rating: 6.5 },
   ];
 
-  // SHOWS SLIDER: 3 visible at a time (change to 4 if you prefer)
-  const [showStart, setShowStart] = useState(0);
+  const films = [
+    {
+      title: "HOW TO TRAIN YOUR DRAGON",
+      image: "/how-to-train.jpg",
+      rating: 4,
+    },
+    { title: "MINECRAFT MOVIE", image: "/minecraft.jpg", rating: 4.5 },
+  ];
+
   const visibleShows = shows.slice(showStart, showStart + 3);
   const handleNextShows = () => {
     setShowStart((prev) => {
@@ -58,19 +49,16 @@ const Review = () => {
     });
   };
 
-  const [filmStart, setFilmStart] = useState(0);
   const visibleFilms = films.slice(filmStart, filmStart + 2);
+
   const handleNextFilms = () => {
     setFilmStart((prev) => {
       if (films.length <= 2) return 0;
-      // If at end, go to start; else advance by 1
       return (prev + 1) % (films.length - 1);
     });
   };
 
-  // Remove button handler
   const handleRemove = (title) => alert(`Remove "${title}" from favorites?`);
-  // Play trailer handler
   const handlePlayTrailer = (i) => alert(`Play trailer ${i + 1}`);
 
   const scrollSlider = (classname, direction = "right") => {
@@ -79,6 +67,16 @@ const Review = () => {
       slider.scrollLeft += direction === "left" ? -160 : 160;
     }
   };
+
+    useEffect(() => {
+    if (id) {
+      fetchMovieDetails(id).then(setFilm);
+    }
+  }, [id]);
+
+  if (!film) return <div>Loading...</div>;
+
+  console.log("Trailer links:", film.trailers);
 
   return (
     <div className="review-bg">
@@ -110,7 +108,7 @@ const Review = () => {
             </div>
             <a
               className="official-page-badge"
-              href={film.officialPage}
+              href={film.officialpage}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -120,7 +118,9 @@ const Review = () => {
           <div className="film-poster-meta-block">
             <img src={film.poster} alt="Poster" className="film-main-poster" />
             <div className="film-meta-row">
-              <span className="film-meta-year">{film.releaseDate}</span>
+              <span className="film-meta-year">
+                {film.releaseDate ? film.releaseDate.split("-")[0] : ""}
+              </span>
               <span className="film-meta-rating">
                 <img
                   src="/star.svg"
@@ -128,14 +128,16 @@ const Review = () => {
                   className="film-meta-star"
                 />
                 <span className="film-meta-rating-value">
-                  {film.rating}
-                  <span className="film-meta-rating-max">/5</span>
+                  {film.rating ? Number(film.rating).toFixed(2) : ""}
+                  <span className="film-meta-rating-max">/10</span>
                 </span>
               </span>
-              <span className="film-meta-duration">{film.duration}</span>
+              <span className="film-meta-duration">
+                {getDurationString(film.duration)}
+              </span>
             </div>
           </div>
-          <div className="film-type">film</div>
+          <span className="film-type">film</span>
           <div className="film-unlike-title">
             <div className="film-title">{film.title}</div>
             <button
@@ -223,12 +225,22 @@ const Review = () => {
                     className="trailer-img"
                     onClick={() => handlePlayTrailer(i)}
                   />
-                  <button
-                    className="play-btn"
-                    onClick={() => handlePlayTrailer(i)}
-                  >
-                    ▶
-                  </button>
+                  <div className="trailer-controls">
+                    <button
+                      className="mute-btn"
+                      onClick={(e) => {
+                        e.stopPropagation(); /* handle mute */
+                      }}
+                    >
+                      <img src="/mute-icon.svg" alt="Mute" />
+                    </button>
+                    <button
+                      className="play-btn"
+                      onClick={() => handlePlayTrailer(i)}
+                    >
+                      <img src="/play-icon.svg" alt="Play" />
+                    </button>
+                  </div>
                 </div>
               ))}
             </div>

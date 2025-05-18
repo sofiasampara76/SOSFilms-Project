@@ -1,45 +1,40 @@
-import React, { useState } from "react";
+import React from "react";
 import "../styles/FilterForm.css";
 
-let genres = [
-  "horror",
-  "comedy",
-  "drama",
-  "crime",
-  "thriller",
-  "action",
-  "mystery",
-  "sci-fi",
-  "adventure",
-  "romance",
-  "animation",
-  "history",
-  "western",
-  "sport",
-  "biography",
-];
-
-const FilterForm = ({ filtersOpen, setFiltersOpen }) => {
+const FilterForm = ({
+  filtersOpen,
+  setFiltersOpen,
+  selectedGenres,
+  toggleGenre,
+  allGenres
+}) => {
   return (
     <div
       className="filter-form"
-      style={{
-        display: filtersOpen ? "flex" : "none"
-      }}
+      style={{ display: filtersOpen ? "flex" : "none" }}
     >
       <span className="genres-text">genres</span>
       <div className="genres-grid">
-        {genres.map((genre, i) => (
-          <div key={i} className="genre-pill">
-            {genre}
-          </div>
-        ))}
+        {allGenres.map((genre) => {
+          const isActive = selectedGenres.includes(genre);
+          return (
+            <div
+              key={genre}
+              className={`genre-pill ${isActive ? "active" : ""}`}
+              onClick={() => toggleGenre(genre)}
+              type="button"
+            >
+              {genre}
+            </div>
+          );
+        })}
       </div>
       <button
         className="close-filter-button"
+        type="button"
         onClick={() => setFiltersOpen(false)}
       >
-        <img src="/close-button.svg" alt="Closing filter form button"></img>
+        <img src="/close-button.svg" alt="Close filter form" />
       </button>
     </div>
   );

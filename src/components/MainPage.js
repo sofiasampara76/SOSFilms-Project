@@ -10,7 +10,7 @@ import {
 } from "../api/tmdbService";
 
 const MainPage = () => {
-  const [viewType, setViewType] = useState("series");
+  const [viewType, setViewType] = useState("shows");
   const [popular, setPopular] = useState(null);
   const [popularShow, setPopularShow] = useState(null);
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +34,7 @@ const MainPage = () => {
       .then((movie) => {
         if (movie) {
           setPopularShow(movie);
-          setViewType("series");
+          setViewType("shows");
         }
       })
       .catch((err) => {
@@ -68,8 +68,6 @@ const MainPage = () => {
       ? popularShow.trailers[0].replace("watch?v=", "embed/") + "?autoplay=1"
       : null;
 
-  let backgroundUrl = "/ginny-and-georgia.png";
-  let mainImgUrl = backgroundUrl;
   let backgroundUrl2 = "/3-body-problem.jpg";
 
   console.log("MainPage — selected viewType:", viewType);
@@ -100,12 +98,13 @@ const MainPage = () => {
         <div className="most-popular-text">
           <p>MOST POPULAR NOW:</p>
         </div>
-        {viewType === "series" ? (
+        {viewType === "shows" ? (
           <div className="popular-now-content">
             <FilmPoster
               posterUrl={popularShow.poster}
               filmTitle={popularShow.title.toUpperCase()}
-              filmType={"series"}
+              filmType={"shows"}
+              filmId={popularShow.id}
             />
             <BigPoster trailerUrl={trailerShowUrl} />
           </div>
@@ -115,6 +114,7 @@ const MainPage = () => {
               posterUrl={popular.poster}
               filmTitle={popular.title.toUpperCase()}
               filmType={"film"}
+              filmId={popular.id}
             />
             <BigPoster trailerUrl={trailerUrl} />
           </div>

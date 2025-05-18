@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FavouriteButton } from "./FavouriteButton";
 
-const FilmPoster = ({ posterUrl, filmTitle, filmType }) => {
+const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId }) => {
   return (
     <motion.div
       className="popular-now-left"
@@ -13,7 +13,7 @@ const FilmPoster = ({ posterUrl, filmTitle, filmType }) => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Link to="/review">
+      <Link to={`/review/${filmId}`}>
         <img src={posterUrl} alt="poster" className="poster-img" />
       </Link>
       <div className="poster-text-container">

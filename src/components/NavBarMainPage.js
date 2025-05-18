@@ -3,7 +3,7 @@ import "../styles/NavBar.css";
 import { Link } from "react-router-dom";
 
 const NavBarMainPage = ({ onSelectType }) => {
-  const [selected, setSelected] = useState("series");
+  const [selected, setSelected] = useState("shows");
 
   const handleSelect = (type) => {
     setSelected(type);
@@ -56,11 +56,11 @@ const NavBarMainPage = ({ onSelectType }) => {
       <div className="series-films-slider">
         <div
           className={`slider-indicator ${
-            selected === "series" ? "left" : "right"
+            selected === "shows" ? "left" : "right"
           }`}
         />
-        <div className="series-container" onClick={() => handleSelect("series")}>
-          <p>series</p>
+        <div className="series-container" onClick={() => handleSelect("shows")}>
+          <p>shows</p>
         </div>
         <div className="films-container" onClick={() => handleSelect("films")}>
           <p>films</p>
