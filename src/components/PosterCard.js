@@ -55,7 +55,7 @@ const PosterCard = ({ filmInfo, isCenter, className, filmType }) => {
         >
           <p className="film-title">{filmInfo.title ?? filmInfo.name}</p>
         </Link>
-        <FavouriteButton item={ filmInfo } type={ filmType } />
+        <FavouriteButton item={{ "id": filmInfo.id, "title": filmInfo.title ?? filmInfo.original_name, "posterUrl": filmInfo.poster, "rating": filmInfo.vote_average ?? filmInfo.rating }} type={ filmType } />
       </div>
     </div>
   );
