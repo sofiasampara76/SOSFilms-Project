@@ -46,7 +46,7 @@ export function RenderFilms({ favoriteFilms, type }) {
       <ul className="film-grid">
         {visibleFilms.map((film, idx) => (
           <li key={film.id || idx} className="show-item show-item-film">
-            <img src={film.image} alt={film.title} className="film-poster" />
+            <img src={film.posterUrl} alt={film.title} className="film-poster" />
             <p className="text-sm">{film.title}</p>
             <div>
               <img
@@ -117,80 +117,69 @@ export function RenderShows({ favoriteShows }) {
 
 
 export const FilmSection = () => {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-    const favoriteFilms = [
-        { title: 'HOW TO TRAIN YOUR DRAGON', image: '/how-to-train.jpg' },
-        { title: 'MINECRAFT MOVIE', image: '/minecraft.jpg' },
-      ];
-    
-      const favoriteShows = [
-        { title: 'RICK AND MORTY', rating: 4 },
-        { title: '3 BODY PROBLEM', rating: 5 },
-        { title: 'THE WHITE LOTUS', rating: 4.5 },
-        { title: 'SHERLOCK', rating: 3.5 },
-      ];
+  const favoriteFilms = user.favouriteFilms || [];
+  const favoriteShows = user.favouriteSeries || [];
 
-    const [isCardView1, setIsCardView1] = useState(true);
-    const [isCardView2, setIsCardView2] = useState(true);
+  const [isCardView1, setIsCardView1] = useState(true);
+  const [isCardView2, setIsCardView2] = useState(true);
 
-    return (
-      <div className="page-wrapper">
+  return (
+    <div className="page-wrapper">
+      <div className="favorite-section">
+        <div className="left-favorite-section">
+          <div className="orientation">
+            <img
+              src="/list1.svg"
+              alt="Card View"
+              onClick={() => setIsCardView1(true)}
+              className={isCardView1 ? 'active-icon' : ''}
+            />
+            <img
+              src="/list2.png"
+              alt="List View"
+              onClick={() => setIsCardView1(false)}
+              className={!isCardView1 ? 'active-icon' : ''}
+            />
+          </div>
 
-        <div className="favorite-section">
-          <div className="left-favorite-section">
-            <div className="orientation">
-              <img
-                src="/list1.svg"
-                alt="Card View"
-                onClick={() => setIsCardView1(true)}
-                className={isCardView1 ? 'active-icon' : ''}
-              />
-              <img
-                src="/list2.png"
-                alt="List View"
-                onClick={() => setIsCardView1(false)}
-                className={!isCardView1 ? 'active-icon' : ''}
-              />
-            </div>
-
-            <div className="film-section">
+          <div className="film-section">
             <h3 className="favorite-title">films</h3>
-                {isCardView1 ? (
-                <RenderFilms favoriteFilms={favoriteFilms} type="film" />
-                ) : (
-                <RenderShows favoriteShows={favoriteFilms} />
-                )}
-
-            </div>
-          </div>
-
-          <div className="left-favorite-section">
-            <div className="orientation">
-              <img
-                src="/list1.svg"
-                alt="Card View"
-                onClick={() => setIsCardView2(true)}
-                className={isCardView2 ? 'active-icon' : ''}
-              />
-              <img
-                src="/list2.png"
-                alt="List View"
-                onClick={() => setIsCardView2(false)}
-                className={!isCardView2 ? 'active-icon' : ''}
-              />
-            </div>
-
-            <div className="film-section">
-            <h3 className="favorite-title">shows</h3>
-            {isCardView2 ? (
-            <RenderFilms favoriteFilms={favoriteShows} type="shows" />
+            {isCardView1 ? (
+              <RenderFilms favoriteFilms={favoriteFilms} type="film" />
             ) : (
-            <RenderShows favoriteShows={favoriteShows} />
+              <RenderShows favoriteShows={favoriteFilms} />
             )}
-            </div>
-          </div>
-
           </div>
         </div>
+
+        <div className="left-favorite-section">
+          <div className="orientation">
+            <img
+              src="/list1.svg"
+              alt="Card View"
+              onClick={() => setIsCardView2(true)}
+              className={isCardView2 ? 'active-icon' : ''}
+            />
+            <img
+              src="/list2.png"
+              alt="List View"
+              onClick={() => setIsCardView2(false)}
+              className={!isCardView2 ? 'active-icon' : ''}
+            />
+          </div>
+
+          <div className="film-section">
+            <h3 className="favorite-title">shows</h3>
+            {isCardView2 ? (
+              <RenderFilms favoriteFilms={favoriteShows} type="shows" />
+            ) : (
+              <RenderShows favoriteShows={favoriteShows} />
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
