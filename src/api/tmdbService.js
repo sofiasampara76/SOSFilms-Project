@@ -70,6 +70,15 @@ export async function fetchMostPopularShow() {
   return details;
 }
 
+export async function searchMovies(query, page = 1) {
+  const res = await fetch(
+    `${API_BASE}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
+  );
+  if (!res.ok) throw new Error("Search failed");
+  const json = await res.json();
+  return json; // містить fields: results (масив), total_pages, total_results
+}
+
 // export async function fetchAllTVShows(page = 1) {
 //   const { data } = await tmdb.get('/discover/tv', {
 //     params: { page }
@@ -185,6 +194,45 @@ export async function fetchMovieDetails(movieId) {
         : null,
     })),
 
+    images: data.images.backdrops.map((img) => ({
+      url: `https://image.tmdb.org/t/p/w780${img.file_path}`,
+    })),
+  };
+}
+
+export async function fetchShowDetails(showId) {
+  const { data } = await tmdb.get(`/tv/${showId}`, {
+    params: { append_to_response: "videos,credits,images" },
+  });
+  return {
+    id: data.id,
+    title: data.name,
+    originalTitle: data.original_name,
+    description: data.overview,
+    releaseDate: data.first_air_date,
+    duration: data.episode_run_time?.[0] ?? null,
+    status: data.status,
+    genres: data.genres.map((g) => g.name),
+    rating: data.vote_average,
+    languages: data.spoken_languages.map((lang) => lang.english_name),
+    officialpage: data.homepage,
+    poster: data.poster_path
+      ? `https://image.tmdb.org/t/p/w500${data.poster_path}`
+      : null,
+    backdrop: data.backdrop_path
+      ? `https://image.tmdb.org/t/p/w780${data.backdrop_path}`
+      : null,
+    trailers: data.videos.results
+      .filter((v) => v.site === "YouTube" && v.type === "Trailer")
+      .map((v) => `https://www.youtube.com/watch?v=${v.key}`),
+    cast: data.credits.cast.map((c) => ({
+      id: c.id,
+      name: c.name,
+      character: c.character,
+      profile: c.profile_path
+        ? `https://image.tmdb.org/t/p/w185${c.profile_path}`
+        : null,
+    })),
     images: data.images.backdrops.map((img) => ({
       url: `https://image.tmdb.org/t/p/w780${img.file_path}`,
     })),

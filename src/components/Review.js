@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Review.css";
-import { useParams } from "react-router-dom";
-import { fetchMovieDetails } from "../api/tmdbService";
+import { useParams, useLocation  } from "react-router-dom";
+import { fetchMovieDetails, fetchShowDetails } from "../api/tmdbService";
 
 const Review = () => {
   const { id } = useParams();
+  const { state } = useLocation();
+  const { filmInfo, type } = state;
 
   // ALL HOOKS AT THE TOP:
   const [film, setFilm] = useState(null);
@@ -40,6 +42,18 @@ const Review = () => {
     { title: "MINECRAFT MOVIE", image: "/minecraft.jpg", rating: 4.5 },
   ];
 
+  useEffect(() => {
+    if (!id || !type) return;
+
+    const fetchFn = type === "films"
+      ? fetchMovieDetails
+      : fetchShowDetails;
+
+    fetchFn(id)
+      .then(data => setFilm(data))
+      .catch(err => console.error("Error fetching details:", err));
+  }, [id, type]);
+
   const visibleShows = shows.slice(showStart, showStart + 3);
   const handleNextShows = () => {
     setShowStart((prev) => {
@@ -67,12 +81,6 @@ const Review = () => {
       slider.scrollLeft += direction === "left" ? -160 : 160;
     }
   };
-
-    useEffect(() => {
-    if (id) {
-      fetchMovieDetails(id).then(setFilm);
-    }
-  }, [id]);
 
   if (!film) return <div>Loading...</div>;
 
@@ -137,7 +145,7 @@ const Review = () => {
               </span>
             </div>
           </div>
-          <span className="film-type">film</span>
+          <span className="film-type">{type === "films" ? "film" : "show"}</span>
           <div className="film-unlike-title">
             <div className="film-title">{film.title}</div>
             <button

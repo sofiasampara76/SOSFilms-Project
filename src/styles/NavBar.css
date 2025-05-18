@@ -73,6 +73,31 @@ body {
   /* vertical-align: middle; */
 }
 
+.search-dropdown {
+  padding: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid #ddd;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.search-item {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.search-item:hover {
+  background: #f0f0f0;
+}
+
 .navbar-search-container {
   width: 35%;
 }

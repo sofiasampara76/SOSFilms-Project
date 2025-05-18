@@ -57,6 +57,10 @@ const MainPage = () => {
       </section>
     );
   }
+  const backgroundUrl =
+  viewType === "shows"
+    ? popularShow.backdrop
+    : popular.poster; 
 
   const trailerUrl =
     popular.trailers.length > 0
@@ -89,7 +93,7 @@ const MainPage = () => {
         <div
           className="popular-now-bg"
           style={{
-            backgroundImage: `url(${popular.backdrop || popular.poster})`,
+            backgroundImage: `url(${backgroundUrl})`,
           }}
         />
 
