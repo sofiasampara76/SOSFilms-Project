@@ -2,11 +2,11 @@ import { React, useState } from "react";
 import "../styles/NavBar.css";
 import { Link } from "react-router-dom";
 
-const NavBarMainPage = ({ onSelectType }) => {
-  const [selected, setSelected] = useState("shows");
+const NavBarMainPage = ({ onSelectType, selected }) => {
+  // const [selected, setSelected] = useState("shows");
 
   const handleSelect = (type) => {
-    setSelected(type);
+    // setSelected(type);
     onSelectType(type);
   };
   return (

@@ -8,12 +8,14 @@ import { Link } from "react-router-dom";
 import { fetchAllMoviesAllPages } from "../api/tmdbService";
 import { fetchAllTVShowsAllPages } from "../api/tmdbService";
 
-const MainSlider = ({ backgroundUrl, onSelectType }) => {
-  const [selected, setSelected] = useState("films");
+const MainSlider = ({ backgroundUrl, onSelectType, selectedType }) => {
+  // const [selected, setSelected] = useState("films");
   const [centerIndex, setCenterIndex] = useState(1);
   const [filtersOpen, setfiltersOpen] = useState(false);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const selected = selectedType;
 
   const [films, setFilms] = useState([]);
   const [shows, setShows] = useState([]);
@@ -53,7 +55,7 @@ const MainSlider = ({ backgroundUrl, onSelectType }) => {
   }, [selected, selectedGenres]);
 
   const handleSelect = (type) => {
-    setSelected(type);
+    // setSelected(type);
     onSelectType(type);
   };
 

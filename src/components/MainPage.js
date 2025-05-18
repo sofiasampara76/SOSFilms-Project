@@ -93,7 +93,7 @@ const MainPage = () => {
           }}
         />
 
-        <NavBarMainPage onSelectType={setViewType} />
+        <NavBarMainPage onSelectType={setViewType} selected={viewType} />
 
         <div className="most-popular-text">
           <p>MOST POPULAR NOW:</p>
@@ -125,7 +125,7 @@ const MainPage = () => {
           <img src="/arrow-down.svg" alt="Arrow down"></img>
         </div>
       </section>
-      <MainSlider backgroundUrl={backgroundUrl2} onSelectType={setViewType} />
+      <MainSlider backgroundUrl={backgroundUrl2} onSelectType={setViewType} selectedType={viewType} />
       {showModal && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
