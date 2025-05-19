@@ -131,7 +131,7 @@ export function RenderShows({ favoriteShows, type }) {
                 <img src="/star.svg" alt="Rating" className="star-icon" />
                 <span className="rating">
                   {show.rating}
-                  <span className="out-of-5">/5</span>
+                  <span className="out-of-5">/10</span>
                 </span>
               </div>
             </div>

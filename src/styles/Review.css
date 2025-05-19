@@ -503,18 +503,15 @@ html {
     padding: 17px 32px;
     display: flex;
     align-items: center;
-    /* Remove: justify-content: space-between; */
-    justify-content: flex-start; /* Let us control spacing! */
+    justify-content: space-between;
     font-size: 1.23em;
     color: #fff;
-    font-weight: 700;
-    gap: 1.2em; /* This spaces between .mlt-title-group and .mlt-list-arrow */
+    font-weight: 700; /* This spaces between .mlt-title-group and .mlt-list-arrow */
 }
 
 .mlt-title-group {
     display: flex;
     align-items: center;
-    gap: 0.7em; /* Adjust spacing between title and unlike icon */
 }
 
 .mlt-list-title {
@@ -720,4 +717,8 @@ html {
     max-width: 200px;
     min-height: 350px;
     max-height: 350px;
+}
+
+.mlt-meta-rating {
+    left: 0 !important;
 }
