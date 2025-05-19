@@ -8,6 +8,7 @@ import {
   fetchShowsByGenres,
 } from "../api/tmdbService";
 import { toggleFavourite } from "./UserService";
+import { Link } from "react-router-dom";
 
 const Review = () => {
   const [isFavourite, setIsFavourite] = useState(false);
@@ -177,9 +178,9 @@ const Review = () => {
       }
     >
       {/* Logo */}
-      <header className="review-header">
+      <Link to="/">
         <img className="logo-image" src="/SOSFilms.svg" alt="Logo" />
-      </header>
+      </Link>
 
       {/* Main upper grid */}
       <div className="review-main-grid">
