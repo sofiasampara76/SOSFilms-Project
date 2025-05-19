@@ -78,6 +78,11 @@ const MainPage = () => {
   console.log("MainPage — trailerUrl (film):", trailerUrl);
   console.log("MainPage — trailerShowUrl (show):", trailerShowUrl);
 
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    setUser(null);
+  };
+
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
@@ -86,9 +91,15 @@ const MainPage = () => {
       <section className="popular-now-container">
         <img className="logo-image" src="/SOSFilms.svg" alt="Logo"></img>
         
-        <button className="login-btn" onClick={handleOpenModal}>
+        {user ? (
+          <button className="login-btn" onClick={handleLogout}>
+            Log Out
+          </button>
+        ) : (
+          <button className="login-btn" onClick={handleOpenModal}>
             Log In / Register
-        </button>
+          </button>
+        )}
 
         <div
           className="popular-now-bg"
@@ -174,6 +185,7 @@ const MainPage = () => {
 
                       if (isMatch) {
                         localStorage.setItem("user", JSON.stringify(user));
+                        setUser(user);
                         setShowModal(false);
                       } else {
                         alert("Incorrect password");
@@ -231,7 +243,7 @@ const MainPage = () => {
                       }
 
                       localStorage.setItem("user", JSON.stringify({ name, email }));
-
+                      setUser(user);
                       e.target.reset();
                       setShowModal(false);
                     } catch (err) {
