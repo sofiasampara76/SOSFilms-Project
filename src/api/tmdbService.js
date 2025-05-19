@@ -139,20 +139,15 @@ export async function fetchAllTVShowsAllPages(limitPages = 2) {
   return all;
 }
 
-// export async function fetchAllTVShowsAllPages() {
-//   const all = [];
-//   let page = 1;
+export async function fetchMovieGenres() {
+  const { data } = await tmdb.get("/genre/movie/list");
+  return data.genres;
+}
 
-//   while (true) {
-//     const shows = await fetchAllTVShows(page);
-//     if (!shows || shows.length === 0) break;
-//     all.push(...shows);
-//     page++;
-//     await new Promise(r => setTimeout(r, 250));
-//   }
-
-//   return all;
-// }
+export async function fetchTVGenres() {
+  const { data } = await tmdb.get("/genre/tv/list");
+  return data.genres;
+}
 
 export async function fetchMoviesByGenre(genreId, page = 1) {
   const { data } = await tmdb.get("/discover/movie", {
