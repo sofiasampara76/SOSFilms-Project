@@ -15,29 +15,31 @@ export function RenderFilms({ favoriteFilms, type }) {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const listKey = type === "films" ? "favouriteFilms" : "favouriteSeries";
   
-    const updatedList = (user.favouriteSeries || []).filter((item) => item.id !== filmId);
+    const updatedList = (user[listKey] || []).filter((item) => item.id !== filmId);
   
-    const response = await fetch(`http://localhost:3005/users/${user.id}`, {
+    const body = {};
+    body[listKey] = updatedList;
+
+    await fetch(`http://localhost:3005/users/${user.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ [listKey]: updatedList }),
     });
   
-    if (!response.ok) {
-      return alert("Failed to update favourites");
-    }
-  
     const updatedUser = { ...user, [listKey]: updatedList };
     localStorage.setItem("user", JSON.stringify(updatedUser));
-    setFilms(updatedList); // this updates only visible films, as expected
+    setFilms(updatedList);
     setStartIndex(0);
   };
-  
 
-  const visibleFilms = [
-    films[startIndex],
-    films[(startIndex + 1) % films.length],
-  ].filter(Boolean);
+  if (films.length === 0) {
+    return <p className="no-favourites-msg">No favourite {type}</p>;
+  }
+
+  const visibleFilms =
+  films.length > 1
+    ? [films[startIndex], films[(startIndex + 1) % films.length]]
+    : [films[startIndex]];
 
   return (
     <div className="film-section">
@@ -101,7 +103,10 @@ export function RenderShows({ favoriteShows, type }) {
     setStartIndex(0);
   };
 
-    
+  if (shows.length === 0) {
+    return <p className="no-favourites-msg">No favourite {type}</p>;
+  }
+
   let visibleShows;
   if (shows.length <= pageSize) {
     visibleShows = shows;
