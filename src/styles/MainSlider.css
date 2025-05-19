@@ -57,6 +57,14 @@
     left: 2%;
 }
 
+.filter-icon {
+  z-index: 4;
+}
+
+.navbar-text {
+  z-index: 4;
+}
+
 .slider-indicator-sliding {
     position: absolute;
     width: 48%;

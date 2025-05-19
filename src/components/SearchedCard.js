@@ -33,7 +33,7 @@ const SearchedCard = ({ filmId, type }) => {
             <div className="film-info-year">
               {info.releaseDate?.split("-")[0]}
             </div>
-            <div className="film-info-rating">{info.rating}/10</div>
+            <div className="film-info-rating">{Number(info.rating).toFixed(1)}/10</div>
           </div>
 
           <div className="film-info-genres">
