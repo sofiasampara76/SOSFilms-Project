@@ -407,6 +407,7 @@ const Review = () => {
                     onClick={() => {
                       window.scrollTo(0, 0);
                     }}
+                    style={{ textDecoration: "none" }}
                   >
                     <img
                       src={film_mrlt.poster}
@@ -568,6 +569,7 @@ const Review = () => {
                     onClick={() => {
                       window.scrollTo(0, 0);
                     }}
+                    style={{ textDecoration: "none" }}
                   >
                     <img
                       src={show.poster}
