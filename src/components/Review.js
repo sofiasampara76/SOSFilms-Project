@@ -7,8 +7,10 @@ import {
   fetchMoviesByGenres,
   fetchShowsByGenres,
 } from "../api/tmdbService";
+import { toggleFavourite } from "./UserService";
 
 const Review = () => {
+  const [isFavourite, setIsFavourite] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const { type } = location.state || {};
@@ -36,6 +38,23 @@ const Review = () => {
     if (m === 0) return `${h}h`;
     return `${h}h ${m}m`;
   }
+
+  useEffect(() => {
+    if (!id || !type) return;
+  
+    const fetchFn = type === "films" ? fetchMovieDetails : fetchShowDetails;
+  
+    fetchFn(id)
+      .then((data) => {
+        setFilm(data);
+        const user = JSON.parse(localStorage.getItem("user") || "{}");
+        const listKey = type === "films" ? "favouriteFilms" : "favouriteSeries";
+        const favList = user[listKey] || [];
+        const alreadyFav = favList.some((item) => item.id === data.id);
+        setIsFavourite(alreadyFav);
+      })
+      .catch((err) => console.error("Error fetching details:", err));
+  }, [id, type]);
 
   useEffect(() => {
     if (!id || !type) return;
@@ -214,13 +233,21 @@ const Review = () => {
             <div className="film-title">{film.title}</div>
             <button
               className="remove-btn"
-              title="Remove from favorites"
-              onClick={() => handleRemove(film.title)}
+              title={isFavourite ? "Remove from favorites" : "Add to favorites"}
+              onClick={() => {
+                const item = {
+                  id: film.id,
+                  title: film.title,
+                  posterUrl: film.poster,
+                  rating: film.rating,
+                };
+                toggleFavourite(item, type);
+                setIsFavourite((prev) => !prev);
+              }}
             >
-              {/* Use your icon */}
               <img
-                src="/unlike.svg"
-                alt="Remove"
+                src={isFavourite ? "/heart-btn-filled.svg" : "/heart-btn.svg"}
+                alt="Favourite"
                 style={{ width: "25px", height: "29px" }}
               />
             </button>
