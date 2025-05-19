@@ -1,6 +1,7 @@
 import React from 'react';
 import '../styles/UserProfile.css';
 import { FilmSection } from './Favourites';
+import { Link } from "react-router-dom";
 
 const UserProfile = () => {
   const backgroundUrl = "/ginny-and-georgia.png";
@@ -15,7 +16,9 @@ const UserProfile = () => {
         style={{ backgroundImage: `url(${backgroundUrl})` }}
       ></div>
       <div className="overlay"></div>
-      <img className="logo-image" src="/SOSFilms.svg" alt="Logo" />
+      <Link to="/">
+        <img className="logo-image" src="/SOSFilms.svg" alt="Logo" />
+      </Link>
 
       <div className="main-content">
         <div className="personal-section">
