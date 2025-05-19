@@ -246,8 +246,10 @@ const MainPage = () => {
                         throw new Error("Failed to register user");
                       }
 
-                      localStorage.setItem("user", JSON.stringify({ name, email }));
-                      setUser(user);
+                      const createdUser = await response.json();
+
+                      localStorage.setItem("user", JSON.stringify(createdUser));
+                      setUser(createdUser);
                       e.target.reset();
                       setShowModal(false);
                     } catch (err) {
