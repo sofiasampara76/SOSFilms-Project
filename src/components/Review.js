@@ -68,7 +68,7 @@ const Review = () => {
       ? similarFilms.slice(filmStart, filmStart + 2)
       : similarFilms.slice(
           listPage * ITEMS_PER_PAGE,
-          (listPage + 1) * ITEMS_PER_PAGE,
+          (listPage + 1) * ITEMS_PER_PAGE
         );
   const hasMoreListFilms =
     (listPage + 1) * ITEMS_PER_PAGE < similarFilms.length;
@@ -78,7 +78,7 @@ const Review = () => {
       ? similarShows.slice(showStart, showStart + SHOWS_PER_CARD_PAGE)
       : similarShows.slice(
           listShowsPage * SHOWS_PER_LIST_PAGE,
-          (listShowsPage + 1) * SHOWS_PER_LIST_PAGE,
+          (listShowsPage + 1) * SHOWS_PER_LIST_PAGE
         );
   const hasMoreListShows =
     (listShowsPage + 1) * SHOWS_PER_LIST_PAGE < similarShows.length;
@@ -126,7 +126,14 @@ const Review = () => {
 
   if (!film) return <div>Loading...</div>;
 
+  const trailers = (film.trailers || []).slice(0, 3);
+
   console.log("Trailer links:", film.trailers);
+
+  function getYouTubeId(url) {
+    const match = url.match(/[?&]v=([^&]+)/);
+    return match ? match[1] : null;
+  }
 
   return (
     <div
@@ -289,32 +296,31 @@ const Review = () => {
           <div className="about-row about-trailers">
             <div className="about-label">trailers</div>
             <div className="trailers">
-              {(film.trailers || []).map((src, i) => (
-                <div className="trailer-thumb" key={i}>
-                  <img
-                    src={src}
-                    alt={`Trailer ${i + 1}`}
-                    className="trailer-img"
-                    onClick={() => handlePlayTrailer(i)}
-                  />
-                  <div className="trailer-controls">
-                    <button
-                      className="mute-btn"
-                      onClick={(e) => {
-                        e.stopPropagation(); /* handle mute */
-                      }}
-                    >
-                      <img src="/mute-icon.svg" alt="Mute" />
-                    </button>
-                    <button
-                      className="play-btn"
-                      onClick={() => handlePlayTrailer(i)}
-                    >
-                      <img src="/play-icon.svg" alt="Play" />
-                    </button>
-                  </div>
-                </div>
-              ))}
+              {trailers.length > 0 ? (
+                trailers.map((src, i) => {
+                  const id = getYouTubeId(src);
+                  if (!id) return null;
+                  const thumb = `https://img.youtube.com/vi/${id}/0.jpg`;
+                  return (
+                    <div className="trailer-thumb" key={i}>
+                      <a
+                        href={src}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={`Watch trailer #${i + 1}`}
+                      >
+                        <img
+                          src={thumb}
+                          alt={`Trailer ${i + 1}`}
+                          className="trailer-img"
+                        />
+                      </a>
+                    </div>
+                  );
+                })
+              ) : (
+                <span className="no-trailers">No trailers available</span>
+              )}
             </div>
           </div>
         </section>
@@ -332,14 +338,18 @@ const Review = () => {
               <div className="mlt-toggles-bubble">
                 <div className="mlt-toggles">
                   <button
-                    className={`mlt-toggle-btn ${filmsView === "card" ? "active" : ""}`}
+                    className={`mlt-toggle-btn ${
+                      filmsView === "card" ? "active" : ""
+                    }`}
                     onClick={() => setFilmsView("card")}
                     title="Card View"
                   >
                     <img src="/two-rectangles.svg" alt="card view" />
                   </button>
                   <button
-                    className={`mlt-toggle-btn ${filmsView === "list" ? "active" : ""}`}
+                    className={`mlt-toggle-btn ${
+                      filmsView === "list" ? "active" : ""
+                    }`}
                     onClick={() => setFilmsView("list")}
                     title="List View"
                   >
@@ -473,14 +483,18 @@ const Review = () => {
               <div className="mlt-toggles-bubble">
                 <div className="mlt-toggles">
                   <button
-                    className={`mlt-toggle-btn ${showsView === "card" ? "active" : ""}`}
+                    className={`mlt-toggle-btn ${
+                      showsView === "card" ? "active" : ""
+                    }`}
                     onClick={() => setShowsView("card")}
                     title="Card View"
                   >
                     <img src="/two-rectangles.svg" alt="card view" />
                   </button>
                   <button
-                    className={`mlt-toggle-btn ${showsView === "list" ? "active" : ""}`}
+                    className={`mlt-toggle-btn ${
+                      showsView === "list" ? "active" : ""
+                    }`}
                     onClick={() => setShowsView("list")}
                     title="List View"
                   >
