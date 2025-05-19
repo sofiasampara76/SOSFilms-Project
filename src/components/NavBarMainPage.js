@@ -106,12 +106,11 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
             </div>
           </div>
         </div>
-        <div
-          className="profile-icon-container"
-          onClick={() => alert("Profile clicked")}
-        >
-          <img src="/profile-icon.svg" alt="Profile Icon"></img>
-        </div>
+        {localStorage.getItem("user") && (
+          <Link to="/profile" className="profile-icon-container">
+            <img src="/profile-icon.svg" alt="Profile Icon" />
+          </Link>
+        )}
       </div>
       <div className="series-films-slider">
         <div
