@@ -85,6 +85,7 @@ const MainPage = () => {
   const handleLogout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    window.location.reload();
   };
 
   const handleOpenModal = () => setShowModal(true);
