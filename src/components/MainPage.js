@@ -133,7 +133,7 @@ const MainPage = () => {
             <FilmPoster
               posterUrl={popular.poster}
               filmTitle={popular.title.toUpperCase()}
-              filmType={"film"}
+              filmType={"films"}
               filmId={popular.id}
               filmRating = {popular.vote_average ?? popular.rating}
             />
