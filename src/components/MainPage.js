@@ -10,6 +10,10 @@ import {
 } from "../api/tmdbService";
 
 const MainPage = () => {
+  const [user, setUser] = useState(() => {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  });
   const [viewType, setViewType] = useState("shows");
   const [popular, setPopular] = useState(null);
   const [popularShow, setPopularShow] = useState(null);
