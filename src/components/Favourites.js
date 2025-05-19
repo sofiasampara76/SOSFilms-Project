@@ -15,7 +15,7 @@ export function RenderFilms({ favoriteFilms, type }) {
     const user = JSON.parse(localStorage.getItem("user") || "{}");
     const listKey = type === "films" ? "favouriteFilms" : "favouriteSeries";
   
-    const updatedList = user[listKey].filter((item) => item.id !== filmId);
+    const updatedList = (user.favouriteSeries || []).filter((item) => item.id !== filmId);
   
     const response = await fetch(`http://localhost:3005/users/${user.id}`, {
       method: "PATCH",
@@ -87,15 +87,15 @@ export function RenderShows({ favoriteShows, type }) {
   const handleRemove = async (showId, type) => {
     const listKey = type === "films" ? "favouriteFilms" : "favouriteSeries";
     const user = JSON.parse(localStorage.getItem("user") || "{}");
-    const updatedList = user.listKey.filter((item) => item.id !== showId);
+    const updatedList = (user[listKey] || []).filter((item) => item.id !== showId);
 
     await fetch(`http://localhost:3005/users/${user.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ listKey: updatedList }),
+      body: JSON.stringify({ [listKey]: updatedList }),
     });
 
-    const updatedUser = { ...user, listKey: updatedList };
+    const updatedUser = { ...user, [listKey]: updatedList };
     localStorage.setItem("user", JSON.stringify(updatedUser));
     setShows(updatedList);
     setStartIndex(0);
