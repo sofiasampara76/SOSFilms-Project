@@ -436,6 +436,19 @@ const Review = () => {
                       />
                     </button> */}
                   </span>
+                  <span className="film-meta-rating mlt-meta-rating">
+                    <img
+                      src="/star.svg"
+                      alt="star"
+                      className="film-meta-star"
+                    />
+                    <span className="film-meta-rating-value">
+                      {film_mrlt.rating
+                        ? Number(film_mrlt.rating).toFixed(1)
+                        : "-"}
+                    </span>
+                    <span className="film-meta-rating-max">/10</span>
+                  </span>
                   <img
                     src="/right-arrow.svg"
                     alt="Next"
@@ -531,57 +544,11 @@ const Review = () => {
             </ul>
           ) : (
             <ul className="mlt-list">
-              {visibleShows.map((show, idx) => (
-                <li className="mlt-list-item" key={show.id || show.title}>
-                  <span className="mlt-list-title">{show.title}</span>
-                  <img src="/star.svg" alt="star" className="star-icon" />
-                  <span className="mlt-list-rating">
-                    {show.rating ? Number(show.rating).toFixed(1) : "-"}
-                    /10
-                  </span>
-                  <button
-                    className="remove-btn"
-                    onClick={() => handleRemove(show.title)}
-                  >
-                    {/* <img
-                      src="/unlike.svg"
-                      alt="Remove"
-                      className="remove-heart"
-                    /> */}
-                  </button>
-                  <img
-                    src="/right-arrow.svg"
-                    alt="Next"
-                    className="mlt-list-arrow"
-                  />
-                </li>
-              ))}
-              {hasMoreListShows && (
-                <li
-                  className="arrow-down-container"
-                  onClick={handleNextShowsList}
-                  style={{
-                    cursor: "pointer",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "20px",
-                  }}
-                >
-                  <img
-                    src="/arrow-down.svg"
-                    alt="Show Previous"
-                    style={{
-                      width: "25px",
-                      height: "25px",
-                    }}
-                  />
-                </li>
-              )}
+              {/* Up Arrow for previous page (if not first page) */}
               {listShowsPage > 0 && (
                 <li
                   className="arrow-up-container"
-                  onClick={handlePrevShows}
+                  onClick={() => setListShowsPage((p) => p - 1)}
                   style={{
                     cursor: "pointer",
                     display: "flex",
@@ -598,6 +565,64 @@ const Review = () => {
                       height: "25px",
                       transform: "rotate(180deg)",
                     }}
+                  />
+                </li>
+              )}
+
+              {/* List of shows for this page */}
+              {visibleShows.map((show, idx) => (
+                <li className="mlt-list-item" key={show.id || show.title}>
+                  <span className="mlt-title-group">
+                    <span className="mlt-list-title">{show.title}</span>
+                    {/* Uncomment below for unlike button if needed */}
+                    {/* <button
+                      className="remove-btn"
+                      onClick={() => handleRemove(show.title)}
+                    >
+                      <img
+                        src="/unlike.svg"
+                        alt="Remove"
+                        className="remove-heart"
+                      />
+                    </button> */}
+                  </span>
+                  {/* --- Rating with star icon --- */}
+                  <span className="film-meta-rating">
+                    <img
+                      src="/star.svg"
+                      alt="star"
+                      className="film-meta-star"
+                    />
+                    <span className="film-meta-rating-value">
+                      {show.rating ? Number(show.rating).toFixed(1) : "-"}
+                    </span>
+                    <span className="film-meta-rating-max">/10</span>
+                  </span>
+                  <img
+                    src="/right-arrow.svg"
+                    alt="Next"
+                    className="mlt-list-arrow"
+                  />
+                </li>
+              ))}
+
+              {/* Down Arrow for next page */}
+              {hasMoreListShows && (
+                <li
+                  className="arrow-down-container"
+                  onClick={() => setListShowsPage((p) => p + 1)}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "10px",
+                  }}
+                >
+                  <img
+                    src="/arrow-down.svg"
+                    alt="Show More"
+                    style={{ width: "25px", height: "25px" }}
                   />
                 </li>
               )}
