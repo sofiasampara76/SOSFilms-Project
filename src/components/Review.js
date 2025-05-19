@@ -42,9 +42,9 @@ const Review = () => {
 
   useEffect(() => {
     if (!id || !type) return;
-  
+
     const fetchFn = type === "films" ? fetchMovieDetails : fetchShowDetails;
-  
+
     fetchFn(id)
       .then((data) => {
         setFilm(data);
@@ -401,17 +401,20 @@ const Review = () => {
               )}
               {visibleFilms.map((film_mrlt, idx) => (
                 <li key={idx} className="show-item show-item-film">
-                  {/* <Link
-                  to={`/review/${film_mrlt.id}`}
-                  state={{ film_mrlt, type: }}
-                  > */}
-                  <img
-                    src={film_mrlt.poster}
-                    alt={film_mrlt.title}
-                    className="film-poster"
-                  />
-                  <p className="film-title">{film_mrlt.title}</p>
-                  {/* </Link> */}
+                  <Link
+                    to={`/review/${film_mrlt.id}`}
+                    state={{ film_mrlt, type: "films" }}
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    <img
+                      src={film_mrlt.poster}
+                      alt={film_mrlt.title}
+                      className="film-poster"
+                    />
+                    <p className="film-title">{film_mrlt.title}</p>
+                  </Link>
                   <button
                     className="remove-btn"
                     onClick={() => handleRemove(film_mrlt.title)}
@@ -559,12 +562,20 @@ const Review = () => {
               )}
               {visibleShows.map((show, idx) => (
                 <li key={show.id || idx} className="show-item show-item-film">
-                  <img
-                    src={show.poster}
-                    alt={show.title}
-                    className="film-poster"
-                  />
-                  <p className="film-title">{show.title}</p>
+                  <Link
+                    to={`/review/${show.id}`}
+                    state={{ show, type: "shows" }}
+                    onClick={() => {
+                      window.scrollTo(0, 0);
+                    }}
+                  >
+                    <img
+                      src={show.poster}
+                      alt={show.title}
+                      className="film-poster"
+                    />
+                    <p className="film-title">{show.title}</p>
+                  </Link>
                   <button
                     className="remove-btn"
                     onClick={() => handleRemove(show.title)}
