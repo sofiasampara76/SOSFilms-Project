@@ -152,16 +152,18 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
             ></img>
             <p className="navbar-text">Filter</p>
           </div>
+          <Link to="/profile">
           <div
             className="navbar-item"
           >
-            <Link to="/profile">
+            
               <img src="/heart-btn.svg" alt="Favourite icon"></img>
               <p className="navbar-text">Favourite</p>
-            </Link>
+            
             
             
           </div>
+              </Link>
           <div className="navbar-search-container">
             <div className="navbar-search">
               <img src="/search-icon.svg" alt="Search Icon"></img>
