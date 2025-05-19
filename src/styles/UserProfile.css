@@ -1,11 +1,12 @@
 .popular-now-bg {
-  position: absolute;
+  position: fixed;
   inset: 0;
   background-size: cover;
   background-position: center;
   filter: blur(30px);
   transform: scale(1.1);
   z-index: 0;
+  min-height: 100vh;
 }
 
 .page-wrapper {
