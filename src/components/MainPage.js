@@ -25,7 +25,7 @@ const MainPage = () => {
       .then((movie) => {
         if (movie) {
           setPopular(movie);
-          setViewType("films");
+          // setViewType("films");
         }
       })
       .catch((err) => {
@@ -38,7 +38,7 @@ const MainPage = () => {
       .then((movie) => {
         if (movie) {
           setPopularShow(movie);
-          setViewType("shows");
+          // setViewType("shows");
         }
       })
       .catch((err) => {

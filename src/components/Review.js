@@ -6,7 +6,8 @@ import { fetchMovieDetails, fetchShowDetails } from "../api/tmdbService";
 const Review = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { filmInfo = null, type = null } = location.state || {};
+  // const { filmInfo = null, type = null } = location.state || {};
+  const { type } = location.state || {};
 
   // ALL HOOKS AT THE TOP:
   const [film, setFilm] = useState(null);

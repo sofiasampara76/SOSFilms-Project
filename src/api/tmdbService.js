@@ -66,7 +66,7 @@ export async function fetchMostPopularShow() {
   const movie = results[0];
   if (!movie) return null;
 
-  const details = await fetchMovieDetails(movie.id);
+  const details = await fetchShowDetails(movie.id);
   return details;
 }
 
