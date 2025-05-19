@@ -10,6 +10,7 @@ import {
 import { toggleFavourite } from "./UserService";
 
 const Review = () => {
+  const [isFavourite, setIsFavourite] = useState(false);
   const { id } = useParams();
   const location = useLocation();
   const { type } = location.state || {};
