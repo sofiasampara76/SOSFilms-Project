@@ -21,7 +21,7 @@ const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId, filmRating }) => {
           <h2 className="title">{filmTitle}</h2>
           <p className="subtitle">{filmType}</p>
         </div>
-        <FavouriteButton item={{ id: filmId, title: filmTitle, posterUrl: posterUrl, rating: filmRating }} type={filmType} />
+                <FavouriteButton item={{ id: filmId, title: filmTitle, posterUrl: posterUrl, rating: filmRating }} type={filmType} />
       </div>
     </motion.div>
   );
