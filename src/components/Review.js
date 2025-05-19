@@ -91,11 +91,11 @@ const Review = () => {
         film.poster
           ? {
               backgroundImage: `
-                    linear-gradient(
-                      to bottom,
-                      rgba(40,30,45,0.85) 10%,
-                      rgba(40,30,45,0.89) 90%
-                    ),
+                  linear-gradient(
+                    to bottom,
+                    rgba(35,40,48,0.78) 10%,
+                    rgba(35,40,48,0.88) 90%
+                  ),
                     url(${film.poster})
                   `,
               backgroundSize: "cover",

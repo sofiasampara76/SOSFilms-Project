@@ -4,6 +4,14 @@
       "id": "52fb",
       "email": "sofiapopenyuk@gmail.com",
       "password": "$2b$10$4hzFAUUcgk6PWs4Suqr2LezRUQJ4mNgVjJXzxXnvC.D1M3ZD.59B2"
+    },
+    {
+      "id": "8fa3",
+      "name": "Ostap",
+      "email": "ostappavlishin@gmail.com",
+      "password": "$2b$10$OU.Zux7bbYYn9xW36uxpIuYQ6UPlqnyAei7HY9aMuBUeyxLKtvBhm",
+      "favouriteFilms": [],
+      "favouriteSeries": []
     }
   ]
 }
