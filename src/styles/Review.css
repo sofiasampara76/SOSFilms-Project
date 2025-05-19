@@ -427,6 +427,7 @@ html {
     overflow: hidden;
     box-shadow: 0 2px 10px #7c6a8c38;
     cursor: pointer;
+    max-width: 30%;
     /* width: 30%;
     height: 20%; */
 }
