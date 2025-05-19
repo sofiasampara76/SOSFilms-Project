@@ -154,9 +154,11 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
           </div>
           <div
             className="navbar-item"
-            onClick={() => alert("Favourite clicked")}
           >
-            <img src="/heart-btn.svg" alt="Favourite icon"></img>
+            <Link to="/profile">
+              <img src="/heart-btn.svg" alt="Favourite icon"></img>
+            </Link>
+            
             <p className="navbar-text">Favourite</p>
           </div>
           <div className="navbar-search-container">
