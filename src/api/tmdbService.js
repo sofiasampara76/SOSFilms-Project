@@ -76,7 +76,16 @@ export async function searchMovies(query, page = 1) {
   );
   if (!res.ok) throw new Error("Search failed");
   const json = await res.json();
-  return json; // містить fields: results (масив), total_pages, total_results
+  return json;
+}
+
+export async function searchShows(query, page = 1) {
+  const res = await fetch(
+    `${API_BASE}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
+  );
+  if (!res.ok) throw new Error("Search failed");
+  const json = await res.json();
+  return json;
 }
 
 // export async function fetchAllTVShows(page = 1) {
