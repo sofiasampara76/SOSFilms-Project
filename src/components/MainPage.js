@@ -25,7 +25,7 @@ const MainPage = () => {
       .then((movie) => {
         if (movie) {
           setPopular(movie);
-          setViewType("films");
+          // setViewType("films");
         }
       })
       .catch((err) => {
@@ -38,7 +38,7 @@ const MainPage = () => {
       .then((movie) => {
         if (movie) {
           setPopularShow(movie);
-          setViewType("shows");
+          // setViewType("shows");
         }
       })
       .catch((err) => {
@@ -246,8 +246,10 @@ const MainPage = () => {
                         throw new Error("Failed to register user");
                       }
 
-                      localStorage.setItem("user", JSON.stringify({ name, email }));
-                      setUser(user);
+                      const createdUser = await response.json();
+
+                      localStorage.setItem("user", JSON.stringify(createdUser));
+                      setUser(createdUser);
                       e.target.reset();
                       setShowModal(false);
                     } catch (err) {

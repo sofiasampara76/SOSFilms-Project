@@ -13,7 +13,7 @@ const FilmPoster = ({ posterUrl, filmTitle, filmType, filmId, filmRating }) => {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
     >
-      <Link to={`/review/${filmId}`}>
+      <Link to={`/review/${filmId}`} state={{ type: filmType}}>
         <img src={posterUrl} alt="poster" className="poster-img" />
       </Link>
       <div className="poster-text-container">

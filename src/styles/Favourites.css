@@ -97,3 +97,23 @@ opacity: 1;
     width: 90%;
     height: 15%;
 }
+
+.show-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    justify-content: flex-start;
+    width: 100%;
+}
+
+.show-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+}
+
+.rating {
+    font-size: 1rem;
+    min-width: 3rem;
+}

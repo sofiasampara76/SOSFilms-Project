@@ -1,15 +1,32 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Review.css";
 import { useParams, useLocation } from "react-router-dom";
-import { fetchMovieDetails, fetchShowDetails } from "../api/tmdbService";
+import {
+  fetchMovieDetails,
+  fetchShowDetails,
+  fetchMoviesByGenres,
+  fetchShowsByGenres,
+} from "../api/tmdbService";
 
 const Review = () => {
   const { id } = useParams();
   const location = useLocation();
-  const { filmInfo = null, type = null } = location.state || {};
+  const { type } = location.state || {};
 
-  // ALL HOOKS AT THE TOP:
   const [film, setFilm] = useState(null);
+  const [similarFilms, setSimilarFilms] = useState([]);
+  const [filmsView, setFilmsView] = useState("card");
+  const [filmStart, setFilmStart] = useState(0);
+
+  const [listPage, setListPage] = useState(0);
+  const ITEMS_PER_PAGE = 4;
+
+  const [similarShows, setSimilarShows] = useState([]);
+  const [showStart, setShowStart] = useState(0);
+  const [showsView, setShowsView] = useState("card");
+  const [listShowsPage, setListShowsPage] = useState(0);
+  const SHOWS_PER_CARD_PAGE = 2;
+  const SHOWS_PER_LIST_PAGE = 4;
 
   function getDurationString(minutes) {
     if (!minutes || isNaN(minutes)) return "";
@@ -20,59 +37,86 @@ const Review = () => {
     return `${h}h ${m}m`;
   }
 
-  const [filmsView, setFilmsView] = useState("card");
-  const [showsView, setShowsView] = useState("list");
-  const [showStart, setShowStart] = useState(0);
-  const [filmStart, setFilmStart] = useState(0);
-
-  const shows = [
-    { title: "RICK AND MORTY", rating: 4 },
-    { title: "3 BODY PROBLEM", rating: 5 },
-    { title: "THE WHITE LOTUS", rating: 4.5 },
-    { title: "SHERLOCK", rating: 3.5 },
-    { title: "HAHA", rating: 6.5 },
-  ];
-
-  const films = [
-    {
-      title: "HOW TO TRAIN YOUR DRAGON",
-      image: "/how-to-train.jpg",
-      rating: 4,
-    },
-    { title: "MINECRAFT MOVIE", image: "/minecraft.jpg", rating: 4.5 },
-  ];
-
   useEffect(() => {
     if (!id || !type) return;
-
     const fetchFn = type === "films" ? fetchMovieDetails : fetchShowDetails;
-
     fetchFn(id)
       .then((data) => setFilm(data))
       .catch((err) => console.error("Error fetching details:", err));
   }, [id, type]);
 
-  const visibleShows = shows.slice(showStart, showStart + 3);
-  const handleNextShows = () => {
-    setShowStart((prev) => {
-      if (shows.length <= 3) return 0;
-      // If at end, go to start; else advance by 1
-      return (prev + 1) % (shows.length - 2);
-    });
-  };
+  useEffect(() => {
+    if (!film || !film.genres) return;
+    fetchShowsByGenres(film.genres)
+      .then((shows) => setSimilarShows(shows.filter((s) => s.id !== film.id)))
+      .catch(console.error);
+  }, [film]);
 
-  const visibleFilms = films.slice(filmStart, filmStart + 2);
+  useEffect(() => {
+    setListPage(0);
+  }, [similarFilms]);
+
+  useEffect(() => {
+    if (!film || !film.genres) return;
+    fetchMoviesByGenres(film.genres)
+      .then((films) => setSimilarFilms(films.filter((f) => f.id !== film.id)))
+      .catch(console.error);
+  }, [film]);
+
+  const visibleFilms =
+    filmsView === "card"
+      ? similarFilms.slice(filmStart, filmStart + 2)
+      : similarFilms.slice(
+          listPage * ITEMS_PER_PAGE,
+          (listPage + 1) * ITEMS_PER_PAGE,
+        );
+  const hasMoreListFilms =
+    (listPage + 1) * ITEMS_PER_PAGE < similarFilms.length;
+
+  const visibleShows =
+    showsView === "card"
+      ? similarShows.slice(showStart, showStart + SHOWS_PER_CARD_PAGE)
+      : similarShows.slice(
+          listShowsPage * SHOWS_PER_LIST_PAGE,
+          (listShowsPage + 1) * SHOWS_PER_LIST_PAGE,
+        );
+  const hasMoreListShows =
+    (listShowsPage + 1) * SHOWS_PER_LIST_PAGE < similarShows.length;
 
   const handleNextFilms = () => {
     setFilmStart((prev) => {
-      if (films.length <= 2) return 0;
-      return (prev + 1) % (films.length - 1);
+      if (similarFilms.length <= 2) return 0;
+      return (prev + 1) % (similarFilms.length - 1);
     });
   };
-
+  const handlePrevFilms = () => {
+    setFilmStart((prev) => {
+      if (similarFilms.length <= 2) return 0;
+      return prev === 0 ? similarFilms.length - 2 : prev - 1;
+    });
+  };
+  const handleNextShows = () => {
+    setShowStart((prev) => {
+      if (similarShows.length <= SHOWS_PER_CARD_PAGE) return 0;
+      return (prev + 1) % (similarShows.length - (SHOWS_PER_CARD_PAGE - 1));
+    });
+  };
+  const handlePrevShows = () => {
+    setShowStart((prev) => {
+      if (similarShows.length <= SHOWS_PER_CARD_PAGE) return 0;
+      return prev === 0 ? similarShows.length - SHOWS_PER_CARD_PAGE : prev - 1;
+    });
+  };
+  const handleNextShowsList = () => {
+    if ((listShowsPage + 1) * SHOWS_PER_LIST_PAGE < similarShows.length) {
+      setListShowsPage((p) => p + 1);
+    }
+  };
+  const handlePrevShowsList = () => {
+    if (listShowsPage > 0) setListShowsPage((p) => p - 1);
+  };
   const handleRemove = (title) => alert(`Remove "${title}" from favorites?`);
   const handlePlayTrailer = (i) => alert(`Play trailer ${i + 1}`);
-
   const scrollSlider = (classname, direction = "right") => {
     const slider = document.querySelector(`.${classname}`);
     if (slider) {
@@ -101,7 +145,6 @@ const Review = () => {
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
-              /* fallback color */
               backgroundColor: "#271f27",
             }
           : {}
@@ -308,27 +351,42 @@ const Review = () => {
           </div>
           {filmsView === "card" ? (
             <ul className="film-grid">
-              {visibleFilms.map((film, idx) => (
-                <li key={idx} className="show-item show-item-film">
+              {similarFilms.length > 2 && (
+                <li className="arrow-down-container" onClick={handlePrevFilms}>
                   <img
-                    src={film.image}
-                    alt={film.title}
+                    src="/right-arrow.svg"
+                    alt="Previous"
+                    className="arrow-down-icon"
+                    style={{ transform: "rotate(180deg)" }}
+                  />
+                </li>
+              )}
+              {visibleFilms.map((film_mrlt, idx) => (
+                <li key={idx} className="show-item show-item-film">
+                  {/* <Link
+                  to={`/review/${film_mrlt.id}`}
+                  state={{ film_mrlt, type: }}
+                  > */}
+                  <img
+                    src={film_mrlt.poster}
+                    alt={film_mrlt.title}
                     className="film-poster"
                   />
-                  <p className="film-title">{film.title}</p>
+                  <p className="film-title">{film_mrlt.title}</p>
+                  {/* </Link> */}
                   <button
                     className="remove-btn"
-                    onClick={() => handleRemove(film.title)}
+                    onClick={() => handleRemove(film_mrlt.title)}
                   >
-                    <img
+                    {/* <img
                       src="/unlike.svg"
                       alt="Remove"
                       className="remove-heart"
-                    />
+                    /> */}
                   </button>
                 </li>
               ))}
-              {films.length > 2 && (
+              {similarFilms.length > 2 && (
                 <li className="arrow-down-container" onClick={handleNextFilms}>
                   <img
                     src="/right-arrow.svg"
@@ -340,19 +398,44 @@ const Review = () => {
             </ul>
           ) : (
             <ul className="mlt-list">
-              {films.map((film, idx) => (
-                <li className="mlt-list-item" key={film.title}>
-                  <span className="mlt-list-title">{film.title}</span>
-                  <button
-                    className="remove-btn"
-                    onClick={() => handleRemove(film.title)}
-                  >
-                    <img
-                      src="/unlike.svg"
-                      alt="Remove"
-                      className="remove-heart"
-                    />
-                  </button>
+              {listPage > 0 && (
+                <li
+                  className="arrow-up-container"
+                  onClick={() => setListPage((p) => p - 1)}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "20px",
+                  }}
+                >
+                  <img
+                    src="/arrow-down.svg"
+                    alt="Show Previous"
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                      transform: "rotate(180deg)",
+                    }}
+                  />
+                </li>
+              )}
+              {visibleFilms.map((film_mrlt, idx) => (
+                <li className="mlt-list-item" key={film_mrlt.title}>
+                  <span className="mlt-title-group">
+                    <span className="mlt-list-title">{film_mrlt.title}</span>
+                    {/* <button
+                      className="remove-btn"
+                      onClick={() => handleRemove(film_mrlt.title)}
+                    >
+                      <img
+                        src="/unlike.svg"
+                        alt="Remove"
+                        className="remove-heart"
+                      />
+                    </button> */}
+                  </span>
                   <img
                     src="/right-arrow.svg"
                     alt="Next"
@@ -360,6 +443,26 @@ const Review = () => {
                   />
                 </li>
               ))}
+              {/* Down Arrow for next page */}
+              {hasMoreListFilms && (
+                <li
+                  className="arrow-down-container"
+                  onClick={() => setListPage((p) => p + 1)}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "10px",
+                  }}
+                >
+                  <img
+                    src="/arrow-down.svg"
+                    alt="Show More"
+                    style={{ width: "25px", height: "25px" }}
+                  />
+                </li>
+              )}
             </ul>
           )}
         </div>
@@ -388,31 +491,39 @@ const Review = () => {
             </div>
           </div>
           {showsView === "card" ? (
-            <ul className="show-list">
+            <ul className="film-grid">
+              {similarShows.length > 2 && (
+                <li className="arrow-down-container" onClick={handlePrevShows}>
+                  <img
+                    src="/right-arrow.svg"
+                    alt="Previous"
+                    className="arrow-down-icon"
+                    style={{ transform: "rotate(180deg)" }}
+                  />
+                </li>
+              )}
               {visibleShows.map((show, idx) => (
-                <li key={idx} className="show-item">
-                  <div className="show-content">
-                    <span className="show-name">{show.title}</span>
-                    <img src="/star.svg" alt="Star" className="star-icon" />
-                    <span className="show-rating-big">{show.rating}/5</span>
-                  </div>
+                <li key={show.id || idx} className="show-item show-item-film">
+                  <img
+                    src={show.poster}
+                    alt={show.title}
+                    className="film-poster"
+                  />
+                  <p className="film-title">{show.title}</p>
                   <button
                     className="remove-btn"
                     onClick={() => handleRemove(show.title)}
                   >
-                    <img
-                      src="/unlike.svg"
-                      alt="Remove"
-                      className="remove-heart"
-                    />
+                    {/* Optional: Uncomment to show icon */}
+                    {/* <img src="/unlike.svg" alt="Remove" className="remove-heart" /> */}
                   </button>
                 </li>
               ))}
-              {shows.length > 3 && (
+              {similarShows.length > 2 && (
                 <li className="arrow-down-container" onClick={handleNextShows}>
                   <img
-                    src="/arrow-down.svg"
-                    alt="Show More"
+                    src="/right-arrow.svg"
+                    alt="Next"
                     className="arrow-down-icon"
                   />
                 </li>
@@ -420,20 +531,23 @@ const Review = () => {
             </ul>
           ) : (
             <ul className="mlt-list">
-              {shows.map((show, idx) => (
-                <li className="mlt-list-item" key={show.title}>
+              {visibleShows.map((show, idx) => (
+                <li className="mlt-list-item" key={show.id || show.title}>
                   <span className="mlt-list-title">{show.title}</span>
                   <img src="/star.svg" alt="star" className="star-icon" />
-                  <span className="mlt-list-rating">{show.rating}/5</span>
+                  <span className="mlt-list-rating">
+                    {show.rating ? Number(show.rating).toFixed(1) : "-"}
+                    /10
+                  </span>
                   <button
                     className="remove-btn"
                     onClick={() => handleRemove(show.title)}
                   >
-                    <img
+                    {/* <img
                       src="/unlike.svg"
                       alt="Remove"
                       className="remove-heart"
-                    />
+                    /> */}
                   </button>
                   <img
                     src="/right-arrow.svg"
@@ -442,6 +556,51 @@ const Review = () => {
                   />
                 </li>
               ))}
+              {hasMoreListShows && (
+                <li
+                  className="arrow-down-container"
+                  onClick={handleNextShowsList}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "20px",
+                  }}
+                >
+                  <img
+                    src="/arrow-down.svg"
+                    alt="Show Previous"
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                    }}
+                  />
+                </li>
+              )}
+              {listShowsPage > 0 && (
+                <li
+                  className="arrow-up-container"
+                  onClick={handlePrevShows}
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "20px",
+                  }}
+                >
+                  <img
+                    src="/arrow-down.svg"
+                    alt="Show Previous"
+                    style={{
+                      width: "25px",
+                      height: "25px",
+                      transform: "rotate(180deg)",
+                    }}
+                  />
+                </li>
+              )}
             </ul>
           )}
         </div>

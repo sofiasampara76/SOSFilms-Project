@@ -66,13 +66,13 @@ export async function fetchMostPopularShow() {
   const movie = results[0];
   if (!movie) return null;
 
-  const details = await fetchMovieDetails(movie.id);
+  const details = await fetchShowDetails(movie.id);
   return details;
 }
 
 export async function searchMovies(query, page = 1) {
   const res = await fetch(
-    `${API_BASE}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
+    `${API_BASE}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
   );
   if (!res.ok) throw new Error("Search failed");
   const json = await res.json();
@@ -81,7 +81,7 @@ export async function searchMovies(query, page = 1) {
 
 export async function searchShows(query, page = 1) {
   const res = await fetch(
-    `${API_BASE}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`
+    `${API_BASE}/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(query)}&page=${page}`,
   );
   if (!res.ok) throw new Error("Search failed");
   const json = await res.json();
@@ -246,4 +246,63 @@ export async function fetchShowDetails(showId) {
       url: `https://image.tmdb.org/t/p/w780${img.file_path}`,
     })),
   };
+}
+
+export async function fetchMoviesByGenres(genreNames, page = 1) {
+  await ensureGenreMap();
+  const genreNameToId = Object.entries(movieGenreMap).reduce(
+    (acc, [id, name]) => {
+      acc[name] = id;
+      return acc;
+    },
+    {},
+  );
+  const genreIds = genreNames
+    .map((name) => genreNameToId[name])
+    .filter(Boolean);
+  if (!genreIds.length) return [];
+  const { data } = await tmdb.get("/discover/movie", {
+    params: {
+      with_genres: genreIds.join(","),
+      page,
+    },
+  });
+  return data.results.map((item) => ({
+    ...item,
+    poster: item.poster_path
+      ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+      : null,
+    genres: item.genre_ids.map((id) => movieGenreMap[id] || "Unknown"),
+    rating: item.vote_average,
+    title: item.title,
+    id: item.id,
+  }));
+}
+
+export async function fetchShowsByGenres(genreNames, page = 1) {
+  await ensureGenreMap();
+  const genreNameToId = Object.entries(tvGenreMap).reduce((acc, [id, name]) => {
+    acc[name] = id;
+    return acc;
+  }, {});
+  const genreIds = genreNames
+    .map((name) => genreNameToId[name])
+    .filter(Boolean);
+  if (!genreIds.length) return [];
+  const { data } = await tmdb.get("/discover/tv", {
+    params: {
+      with_genres: genreIds.join(","),
+      page,
+    },
+  });
+  return data.results.map((item) => ({
+    ...item,
+    poster: item.poster_path
+      ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+      : null,
+    genres: item.genre_ids.map((id) => tvGenreMap[id] || "Unknown"),
+    rating: item.vote_average,
+    title: item.name,
+    id: item.id,
+  }));
 }

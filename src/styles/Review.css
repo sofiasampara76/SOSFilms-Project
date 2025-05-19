@@ -459,7 +459,7 @@ html {
 /* === More Like This Section === */
 .more-like-this {
     margin: 54px auto 0 auto;
-    max-width: 1170px;
+    max-width: 1250px;
     min-height: 525px;
     padding: 30px 28px 30px 28px;
     border-radius: 32px;
@@ -491,10 +491,18 @@ html {
     padding: 17px 32px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* Remove: justify-content: space-between; */
+    justify-content: flex-start; /* Let us control spacing! */
     font-size: 1.23em;
     color: #fff;
     font-weight: 700;
+    gap: 1.2em; /* This spaces between .mlt-title-group and .mlt-list-arrow */
+}
+
+.mlt-title-group {
+    display: flex;
+    align-items: center;
+    gap: 0.7em; /* Adjust spacing between title and unlike icon */
 }
 
 .mlt-list-title {
@@ -663,15 +671,6 @@ html {
     height: 22px;
 }
 
-.mlt-right-arrow {
-    position: absolute;
-    top: 50%;
-    right: -24px;
-    transform: translateY(-50%);
-    font-size: 2em;
-    color: #b49ef9;
-}
-
 .mlt-shows-list.list,
 .mlt-films-list.list {
     display: flex;
@@ -702,4 +701,11 @@ html {
     font-size: 2em;
     color: #b49ef9;
     margin-left: auto;
+}
+
+.show-item-film {
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 350px;
+    max-height: 350px;
 }
