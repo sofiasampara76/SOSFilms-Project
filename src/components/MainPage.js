@@ -4,6 +4,7 @@ import FilmPoster from "./FilmPoster";
 import BigPoster from "./BigPoster";
 import NavBarMainPage from "./NavBarMainPage";
 import MainSlider from "./MainSlider";
+import AuthModal from "./AuthModal";
 import {
   fetchMostPopularMovie,
   fetchMostPopularShow,
@@ -91,6 +92,11 @@ const MainPage = () => {
   const handleOpenModal = () => setShowModal(true);
   const handleCloseModal = () => setShowModal(false);
 
+  const handleLoginSuccess = (loggedInUser) => {
+    setUser(loggedInUser);
+    setShowModal(false);
+  };
+
   return (
     <>
       <section className="popular-now-container">
@@ -151,123 +157,12 @@ const MainPage = () => {
       {showModal && (
         <div className="modal-overlay" onClick={handleCloseModal}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <div className="auth-toggle">
-              <button
-                className={authMode === "login" ? "active-auth-tab" : ""}
-                onClick={() => setAuthMode("login")}
-              >
-                Log In
-              </button>
-              <button
-                className={authMode === "register" ? "active-auth-tab" : ""}
-                onClick={() => setAuthMode("register")}
-              >
-                Register
-              </button>
-            </div>
-            {authMode === "login" ? (
-              <>
-                <h2>Log In</h2>
-                <form
-                  className="register-form"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const email = e.target.email.value;
-                    const password = e.target.password.value;
-
-                    try {
-                      const response = await fetch(`http://localhost:3005/users?email=${email}`);
-                      const users = await response.json();
-
-                      if (users.length === 0) {
-                        alert("User not found");
-                        return;
-                      }
-
-                      const user = users[0];
-                      const bcrypt = await import('bcryptjs');
-                      const isMatch = await bcrypt.compare(password, user.password);
-
-                      if (isMatch) {
-                        localStorage.setItem("user", JSON.stringify(user));
-                        setUser(user);
-                        setShowModal(false);
-                      } else {
-                        alert("Incorrect password");
-                      }
-                    } catch (err) {
-                      console.error("Login error:", err);
-                      alert("Login failed");
-                    }
-                  }}
-                >
-                  <input type="email" name="email" placeholder="Email" required />
-                  <input type="password" name="password" placeholder="Password" required />
-                  <button type="submit">Log In</button>
-                  <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
-                </form>
-
-              </>
-            ) : (
-              <>
-                <h2>Register</h2>
-                <form
-                  className="register-form"
-                  onSubmit={async (e) => {
-                    e.preventDefault();
-                    const name = e.target.name.value;
-                    const email = e.target.email.value;
-                    const password = e.target.password.value;
-                    const confirmPassword = e.target.confirmPassword.value;
-
-                    if (password !== confirmPassword) {
-                      alert("Passwords do not match");
-                      return;
-                    }
-
-                    try {
-                      const bcrypt = await import('bcryptjs');
-                      const hashedPassword = await bcrypt.hash(password, 10);
-
-                      const response = await fetch("http://localhost:3005/users", {
-                        method: "POST",
-                        headers: {
-                          "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({
-                          name,
-                          email,
-                          password: hashedPassword,
-                          favouriteFilms: [],
-                          favouriteSeries: []
-                        })
-                      });
-
-                      if (!response.ok) {
-                        throw new Error("Failed to register user");
-                      }
-
-                      const createdUser = await response.json();
-
-                      localStorage.setItem("user", JSON.stringify(createdUser));
-                      setUser(createdUser);
-                      e.target.reset();
-                      setShowModal(false);
-                    } catch (err) {
-                      console.error("Registration error:", err);
-                      alert("Registration failed");
-                    }
-                  }}
-                >
-                  <input type="text" name="name" placeholder="Name" required />
-                  <input type="email" name="email" placeholder="Email" required />
-                  <input type="password" name="password" placeholder="Password" required />
-                  <input type="password" name="confirmPassword" placeholder="Confirm Password" required />
-                  <button type="submit">Register</button>
-                  <p className="close-modal" onClick={handleCloseModal}>Cancel</p>
-                </form>
-              </>
-            )}
+            <AuthModal
+              mode={authMode}
+              setMode={setAuthMode}
+              onClose={() => setShowModal(false)}
+              onLogin={handleLoginSuccess}
+            />
           </div>
         </div>
       )}
