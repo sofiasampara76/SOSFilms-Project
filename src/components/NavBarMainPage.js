@@ -152,7 +152,7 @@ const NavBarMainPage = ({ onSelectType, selected }) => {
             ></img>
             <p className="navbar-text">Filter</p>
           </div>
-          <Link to="/profile">
+          <Link to="/profile" style={{ textDecoration: "none" }}>
           <div
             className="navbar-item"
           >
