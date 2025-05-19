@@ -31,10 +31,10 @@ const UserProfile = () => {
                 </div>
                 <div className="text-left">
                   <p className="font-bold">
-                    name: <span className='inside-font-bold'>{user.name || "Anonymous"}</span>
+                    <span className="label">name:</span> <span className='inside-font-bold'>{user.name || "Anonymous"}</span>
                   </p>
                   <p className="font-bold">
-                    mail: <span className='inside-font-bold'>{user.email}</span>
+                    <span className="label">mail:</span> <span className='inside-font-bold'>{user.email}</span>
                   </p>
                 </div>
               </div>
