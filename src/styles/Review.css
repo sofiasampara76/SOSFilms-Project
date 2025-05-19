@@ -6,7 +6,7 @@ html {
     height: 100%;
     margin: 0;
     font-family: "Madimi One";
-    background: radial-gradient(ellipse at 50% 20%, #6e463d 0%, #251f24 80%);
+    /* background: radial-gradient(ellipse at 50% 20%, #6e463d 0%, #251f24 80%); */
     min-height: 100vh;
 }
 
@@ -15,6 +15,7 @@ html {
     padding: 0;
     box-sizing: border-box;
     position: relative;
+    padding-bottom: 30px;
     /* beautiful backdrop */
     background: radial-gradient(ellipse at 50% 30%, #bb8c77cc 0%, #271f27 90%);
 }
@@ -159,7 +160,7 @@ html {
 .film-main-poster:hover {
     transform: scale(1.04);
     box-shadow:
-        0 16px 36px 0 rgba(60, 30, 140, 0.1),
+        0 16px 36px 0 rgba(255, 255, 255, 0.25),
         0 4px 18px rgba(0, 0, 0, 0.13);
     z-index: 3;
 }
@@ -226,13 +227,13 @@ html {
 }
 
 .film-title {
+    align-self: flex-start;
+    text-align: left;
     font-size: 23px;
     font-weight: 650;
     color: rgba(255, 255, 255, 1);
     max-width: 200px;
-    text-shadow: 0 2px 16px #42226650;
-    align-self: flex-start;
-    text-align: left;
+    /* text-shadow: 0 2px 16px #42226650; */
     margin-left: 0;
 }
 
@@ -459,8 +460,10 @@ html {
 .more-like-this {
     margin: 54px auto 0 auto;
     max-width: 1170px;
-    padding: 30px 28px 36px 28px;
+    min-height: 525px;
+    padding: 30px 28px 30px 28px;
     border-radius: 32px;
+    margin-bottom: 20px;
 }
 
 .mlt-title {
@@ -538,26 +541,61 @@ html {
     font-size: 23px;
     font-weight: 700;
     color: #fff;
-    margin-right: 1.1rem;
+    text-align: center;
+}
+.mlt-center-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .mlt-toggles {
     display: flex;
-    gap: 5px;
+    align-items: center;
+    gap: 10px;
+    margin: 0 3px;
+}
+
+.mlt-toggles-bar {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.mlt-toggles-bubble {
+    position: relative;
+    z-index: 2;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 44px;
+    height: 30px;
+    width: 96px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 18px;
 }
 
 .mlt-toggle-btn {
     background: none;
     border: none;
-    font-size: 2em;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25px;
+    width: 40px;
     cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    border-radius: 8px;
+    opacity: 0.8;
+    transition: background 0.15s;
+    padding: 0;
 }
+
 .mlt-toggle-btn.active {
+    background: rgba(255, 255, 255, 0.2);
     opacity: 1;
-    background: rgba(180, 158, 249, 0.17);
 }
 
 .mlt-films-list.card,

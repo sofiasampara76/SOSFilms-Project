@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "../styles/Review.css";
-import { useParams, useLocation  } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import { fetchMovieDetails, fetchShowDetails } from "../api/tmdbService";
 
 const Review = () => {
   const { id } = useParams();
-  const { state } = useLocation();
-  const { filmInfo, type } = state;
+  const location = useLocation();
+  const { filmInfo = null, type = null } = location.state || {};
 
   // ALL HOOKS AT THE TOP:
   const [film, setFilm] = useState(null);
@@ -45,13 +45,11 @@ const Review = () => {
   useEffect(() => {
     if (!id || !type) return;
 
-    const fetchFn = type === "films"
-      ? fetchMovieDetails
-      : fetchShowDetails;
+    const fetchFn = type === "films" ? fetchMovieDetails : fetchShowDetails;
 
     fetchFn(id)
-      .then(data => setFilm(data))
-      .catch(err => console.error("Error fetching details:", err));
+      .then((data) => setFilm(data))
+      .catch((err) => console.error("Error fetching details:", err));
   }, [id, type]);
 
   const visibleShows = shows.slice(showStart, showStart + 3);
@@ -87,7 +85,28 @@ const Review = () => {
   console.log("Trailer links:", film.trailers);
 
   return (
-    <div className="review-bg">
+    <div
+      className="review-bg"
+      style={
+        film.poster
+          ? {
+              backgroundImage: `
+                    linear-gradient(
+                      to bottom,
+                      rgba(40,30,45,0.85) 10%,
+                      rgba(40,30,45,0.89) 90%
+                    ),
+                    url(${film.poster})
+                  `,
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              /* fallback color */
+              backgroundColor: "#271f27",
+            }
+          : {}
+      }
+    >
       {/* Logo */}
       <header className="review-header">
         <img className="logo-image" src="/SOSFilms.svg" alt="Logo" />
@@ -145,7 +164,9 @@ const Review = () => {
               </span>
             </div>
           </div>
-          <span className="film-type">{type === "films" ? "film" : "show"}</span>
+          <span className="film-type">
+            {type === "films" ? "film" : "show"}
+          </span>
           <div className="film-unlike-title">
             <div className="film-title">{film.title}</div>
             <button
@@ -262,24 +283,28 @@ const Review = () => {
         style={{ display: "flex", gap: "44px", justifyContent: "center" }}
       >
         <div style={{ flex: 1 }}>
-          <div className="mlt-header">
+          <div className="mlt-center-col">
             <span className="mlt-label">films</span>
-          </div>
-          <div className="mlt-toggles">
-            <button
-              className={`mlt-toggle-btn ${filmsView === "card" ? "active" : ""}`}
-              onClick={() => setFilmsView("card")}
-              title="Card View"
-            >
-              <img src="/two-rectangles.svg" alt="card view" />
-            </button>
-            <button
-              className={`mlt-toggle-btn ${filmsView === "list" ? "active" : ""}`}
-              onClick={() => setFilmsView("list")}
-              title="List View"
-            >
-              <img src="/list.svg" alt="list view" />
-            </button>
+            <div className="mlt-toggles-bar">
+              <div className="mlt-toggles-bubble">
+                <div className="mlt-toggles">
+                  <button
+                    className={`mlt-toggle-btn ${filmsView === "card" ? "active" : ""}`}
+                    onClick={() => setFilmsView("card")}
+                    title="Card View"
+                  >
+                    <img src="/two-rectangles.svg" alt="card view" />
+                  </button>
+                  <button
+                    className={`mlt-toggle-btn ${filmsView === "list" ? "active" : ""}`}
+                    onClick={() => setFilmsView("list")}
+                    title="List View"
+                  >
+                    <img src="/list.svg" alt="list view" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           {filmsView === "card" ? (
             <ul className="film-grid">
@@ -339,8 +364,28 @@ const Review = () => {
           )}
         </div>
         <div style={{ flex: 1 }}>
-          <div className="mlt-header">
+          <div className="mlt-center-col">
             <span className="mlt-label">shows</span>
+            <div className="mlt-toggles-bar">
+              <div className="mlt-toggles-bubble">
+                <div className="mlt-toggles">
+                  <button
+                    className={`mlt-toggle-btn ${showsView === "card" ? "active" : ""}`}
+                    onClick={() => setShowsView("card")}
+                    title="Card View"
+                  >
+                    <img src="/two-rectangles.svg" alt="card view" />
+                  </button>
+                  <button
+                    className={`mlt-toggle-btn ${showsView === "list" ? "active" : ""}`}
+                    onClick={() => setShowsView("list")}
+                    title="List View"
+                  >
+                    <img src="/list.svg" alt="list view" />
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
           {showsView === "card" ? (
             <ul className="show-list">
